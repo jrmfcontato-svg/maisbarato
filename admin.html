@@ -6,7 +6,6 @@
   <title>Painel Admin Seguro - GarimpaTech</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Tela de Login */
     #loginScreen {
       position: fixed; inset: 0; background: #111827; z-index: 9999;
       display: flex; align-items: center; justify-content: center; padding: 20px;
@@ -27,12 +26,11 @@
     }
     .login-error { color: #dc2626; font-size: 0.85rem; margin-top: 10px; display: none; }
 
-    /* Estrutura do Painel */
     #adminApp { display: none; }
     .admin-tabs {
       background: #fff; border-bottom: 1px solid var(--border); padding: 0 20px;
     }
-    .admin-tabs .container { display: flex; gap: 12px; }
+    .admin-tabs .container { display: flex; gap: 12px; flex-wrap: wrap; }
     .admin-tab-btn {
       padding: 14px 18px; border: none; background: none; font-weight: 700;
       color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent;
@@ -92,7 +90,6 @@
       </div>
     </header>
 
-    <!-- Abas do Painel -->
     <div class="admin-tabs">
       <div class="container">
         <button class="admin-tab-btn active" onclick="mudarAbaAdmin('produtos', this)">📦 Produtos & Ofertas</button>
@@ -320,7 +317,6 @@
       liberarPainel();
     }
 
-    // --- LÓGICA DO PAINEL ---
     let produtos = [];
     let configLayout = {
       corPrimaria: "#6d28d9",
@@ -342,7 +338,6 @@
     }
 
     async function initAdmin() {
-      // Carregar credenciais salvas localmente
       document.getElementById('ghOwner').value = localStorage.getItem('gh_owner') || 'jrmfcontato-svg';
       document.getElementById('ghRepo').value = localStorage.getItem('gh_repo') || 'maisbarato';
       document.getElementById('ghToken').value = localStorage.getItem('gh_token') || '';
@@ -397,7 +392,7 @@
 
     function salvarCredenciaisGithub() {
       localStorage.setItem('gh_owner', document.getElementById('ghOwner').value.trim());
-      localStorage.setItem('ghRepo', document.getElementById('ghRepo').value.trim());
+      localStorage.setItem('gh_repo', document.getElementById('ghRepo').value.trim());
       localStorage.setItem('gh_token', document.getElementById('ghToken').value.trim());
       alert("Credenciais salvas com segurança apenas neste navegador!");
     }
