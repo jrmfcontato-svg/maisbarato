@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "15/11/2026, 18:23",
+  "ultimaAtualizacao": "15/11/2026, 18:25",
   "config": {
     "corPrimaria": "#6d28d9",
     "corSecundaria": "#4c1d95",
@@ -13,13 +13,51 @@
   },
   "produtos": [
     {
+      "id": 1794777938097,
+      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAyH0cgHLDGjRgfWDKwyQIHPBHLdujb6POHDx8WDYd6nXKFcM9dcY8gEGTW_MWS9OwdPGPcXEgS2yTnqHcJ83e0IF4Xnz3Qi9uarJsZvPI1jTPoGcXjaMigHz4jsAJwxqRnZFqGe_IEsc8zC8VnNd9sh2JfIEcHYXEaoKKzLufK_hxskLZbKGma4N5OBel1k4tG9eK0&mmp_pid=an_18352500843&uls_trackid=574rbhcp00bu&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuupky61kioq",
+      "categoria": "Hardware",
+      "specsResumo": "",
+      "imagem": "https://deo.shopeemobile.com/shopee/shopee-mobilemall-live-sg/assets/c68ff78f5fd71182.png",
+      "imagens": [
+        "https://deo.shopeemobile.com/shopee/shopee-mobilemall-live-sg/assets/c68ff78f5fd71182.png"
+      ],
+      "quedaPercentual": 10,
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        950,
+        920,
+        890,
+        850,
+        810,
+        750
+      ],
+      "ficha": {},
+      "ofertas": [
+        {
+          "loja": "Shopee",
+          "idExterno": "",
+          "preco": 313.73,
+          "frete": "Frete Grátis",
+          "parcelamento": "10x sem juros",
+          "link": "https://s.shopee.com.br/4VeOPrHqmU"
+        }
+      ]
+    },
+    {
       "id": 1794777786736,
       "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAwIGo4PIJPVdmQHllLvhxs_arjowCGRAxjlxXxAufM5I3mbrVF-wL3vBD6dCKKrWw-SS7UEfNOE37SvI4LvwbME5fPeN8mG-AVDSN4NYjSPSEkPVvvH5ZBwWIR2Td6ozK8qVg2Bl2_kiMaX6zqQzDUE9tuzlLEBgdp20Otz868V3tQy1v2zvhHOSkchaXdd7HTXm0w&mmp_pid=an_18352500843&uls_trackid=574rb22101l7&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuup8epz9qm9",
       "categoria": "Hardware",
       "specsResumo": "",
-      "imagem": "https://via.placeholder.com/300",
+      "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webp",
       "imagens": [
-        "https://via.placeholder.com/300"
+        "https://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webp"
       ],
       "quedaPercentual": 10,
       "meses": [
