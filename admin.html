@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Admin Seguro - GarimpaTech</title>
+  <title>Painel Admin - GarimpaTech</title>
   <link rel="stylesheet" href="style.css">
   <style>
     #loginScreen {
@@ -50,11 +50,9 @@
     }
     .btn-fetch-link:disabled { opacity: 0.6; cursor: wait; }
 
-    .gallery-preview-admin {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
-    }
+    .gallery-preview-admin { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .gallery-thumb-box {
-      position: relative; width: 58px; height: 58px; border: 1px solid var(--border);
+      position: relative; width: 56px; height: 56px; border: 1px solid var(--border);
       border-radius: 6px; padding: 3px; background: #fff;
     }
     .gallery-thumb-box img { width: 100%; height: 100%; object-fit: contain; }
@@ -63,11 +61,11 @@
       border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer;
     }
 
-    .admin-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin: 28px auto; }
-    .panel-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
-    .panel-box h2 { margin-bottom: 16px; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
+    .admin-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; margin: 28px auto; }
+    .panel-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 20px; }
+    .panel-box h2 { margin-bottom: 14px; font-size: 1.15rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .form-group { margin-bottom: 13px; }
+    .form-group label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
     .form-group input, .form-group select, .form-group textarea {
       width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem;
     }
@@ -76,14 +74,15 @@
     .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
     .offer-card-admin { background: #f9fafb; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; position: relative; }
     .btn-remove { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #b91c1c; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
-    .btn-add-sub { background: #ede9fe; color: var(--primary); border: 1px dashed var(--primary); padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 16px; }
+    .btn-add-sub { background: #ede9fe; color: var(--primary); border: 1px dashed var(--primary); padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 14px; }
     .btn-save-prod { background: var(--success); color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; }
     .btn-download { background: var(--accent); color: #111827; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.88rem; }
     .btn-publish { background: #10b981; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.88rem; }
     .prod-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); gap: 10px; }
     .prod-list-item img { width: 48px; height: 48px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); }
-    .action-btns { display: flex; gap: 6px; }
+    .action-btns { display: flex; gap: 6px; flex-shrink: 0; }
     .btn-sm { padding: 6px 10px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+    .live-preview-wrapper { max-width: 280px; margin: 0 auto; }
     @media (max-width: 900px) { .admin-grid, .row-3, .auto-import-row { grid-template-columns: 1fr; flex-direction: column; } }
   </style>
 </head>
@@ -122,27 +121,32 @@
 
     <main class="container tab-pane active" id="pane-produtos">
       <div class="admin-grid">
+        <!-- COLUNA ESQUERDA: FORMULÁRIO ENXUTO -->
         <section class="panel-box">
-          <h2 id="formTitle">Cadastrar Novo Produto Tech</h2>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:16px;">
+            <h2 id="formTitle" style="border:none; margin:0; padding:0;">Cadastrar Produto Tech</h2>
+            <button type="button" class="btn-sm" style="background:#f3f4f6; color:#374151;" onclick="limparFormulario()">+ Novo</button>
+          </div>
           <input type="hidden" id="editId" value="">
 
           <div class="auto-import-box">
-            <label>⚡ Preenchimento Automático (Cole o Link do Produto ou Link de Afiliado)</label>
+            <label>⚡ 1. Preenchimento Automático via Link</label>
             <div class="auto-import-row">
-              <input type="url" id="urlImportInput" placeholder="https://amzn.to/... ou https://mercadolivre.com/sec/...">
+              <input type="url" id="urlImportInput" placeholder="Cole o link do produto ou de afiliado...">
               <button type="button" class="btn-fetch-link" id="btnFetchLink" onclick="puxarDadosDoLink()">Puxar Dados</button>
             </div>
             <small id="importStatus" style="display:block; margin-top:6px; color:#5b21b6; font-size:0.78rem;"></small>
           </div>
 
           <div class="form-group">
-            <label>Nome Completo do Produto</label>
-            <input type="text" id="pNome" placeholder="Ex: Processador AMD Ryzen 5 5600...">
+            <label>2. Título do Produto na Vitrine</label>
+            <input type="text" id="pNome" placeholder="Ex: Processador AMD Ryzen 5 5600 AM4" oninput="atualizarPreviewCard()">
           </div>
+
           <div class="row-2">
             <div class="form-group">
               <label>Categoria</label>
-              <select id="pCategoria">
+              <select id="pCategoria" onchange="atualizarPreviewCard()">
                 <option value="Hardware">Hardware & PC</option>
                 <option value="Smartphones">Smartphones</option>
                 <option value="Perifericos">Monitores & Periféricos</option>
@@ -151,46 +155,54 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Queda de Preço Hoje (%)</label>
-              <input type="number" id="pQueda" value="10" min="0" max="99">
+              <label>Desconto Exibido (%)</label>
+              <input type="number" id="pQueda" value="12" min="0" max="99" oninput="atualizarPreviewCard()">
             </div>
           </div>
+
           <div class="form-group">
-            <label>Resumo das Especificações</label>
-            <input type="text" id="pSpecs" placeholder="Ex: 6 Núcleos • 12 Threads • Socket AM4">
+            <label>Destaque Técnico Curto (aparece abaixo do título)</label>
+            <input type="text" id="pSpecs" placeholder="Ex: 6 Núcleos • 12 Threads • Cache 35MB" oninput="atualizarPreviewCard()">
           </div>
 
-          <!-- GALERIA DE IMAGENS / CARROSSEL -->
           <div class="form-group">
-            <label>Carrossel de Imagens (1 URL por linha — a primeira é a capa)</label>
-            <textarea id="pImagensLista" rows="3" placeholder="https://imagem1.jpg
-https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
+            <label>Fotos do Produto (1 URL por linha — a 1ª é a capa)</label>
+            <textarea id="pImagensLista" rows="3" placeholder="https://..." oninput="atualizarPreviewGaleria(); atualizarPreviewCard();"></textarea>
             <div class="gallery-preview-admin" id="galleryPreviewAdmin"></div>
           </div>
 
-          <div class="form-group">
-            <label>Histórico dos últimos 6 meses (valores separados por vírgula)</label>
-            <input type="text" id="pHistorico" value="950, 920, 890, 850, 810, 750">
-          </div>
-          <h3 style="margin: 18px 0 10px; font-size: 1rem;">Lojas e Links de Afiliado</h3>
+          <h3 style="margin: 18px 0 10px; font-size: 0.98rem;">3. Lojas e Links de Afiliado</h3>
           <div id="ofertasContainer"></div>
-          <button type="button" class="btn-add-sub" onclick="adicionarCampoOferta()">+ Adicionar Outra Loja / Oferta</button>
-          <h3 style="margin: 18px 0 10px; font-size: 1rem;">Ficha Técnica (Opcional)</h3>
-          <div id="fichaContainer"></div>
-          <button type="button" class="btn-add-sub" onclick="adicionarCampoFicha()">+ Adicionar Especificação</button>
+          <button type="button" class="btn-add-sub" onclick="adicionarCampoOferta()">+ Adicionar Outra Loja para Comparação</button>
+
+          <details style="margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; padding: 10px;">
+            <summary style="font-size: 0.85rem; font-weight: 700; cursor: pointer; color: var(--text-muted);">Ficha Técnica Detalhada (Opcional)</summary>
+            <div id="fichaContainer" style="margin-top: 10px;"></div>
+            <button type="button" class="btn-add-sub" style="margin-bottom:0;" onclick="adicionarCampoFicha()">+ Adicionar Linha na Ficha</button>
+          </details>
+
           <button type="button" class="btn-save-prod" onclick="salvarProduto()">✅ Salvar Produto na Lista</button>
         </section>
 
-        <section class="panel-box">
-          <h2>Produtos no GarimpaTech (<span id="totalProds">0</span>)</h2>
-          <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:14px;">
-            Depois de salvar na lista, clique em <strong>"🚀 Publicar Direto no Site"</strong> no topo para enviar ao ar.
-          </p>
-          <div id="listaProdutosAdmin"></div>
-        </section>
+        <!-- COLUNA DIREITA: PREVIEW AO VIVO + LISTA PUBLICADA -->
+        <div>
+          <section class="panel-box">
+            <h2>Pré-visualização do Card no Site</h2>
+            <div class="live-preview-wrapper" id="liveCardPreview"></div>
+          </section>
+
+          <section class="panel-box">
+            <h2>Produtos no Catálogo (<span id="totalProds">0</span>)</h2>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
+              Clique em <strong>"🚀 Publicar Direto no Site"</strong> no topo após salvar ou excluir itens.
+            </p>
+            <div id="listaProdutosAdmin"></div>
+          </section>
+        </div>
       </div>
     </main>
 
+    <!-- ABA 2: LAYOUT -->
     <main class="container tab-pane" id="pane-layout" style="margin-top: 28px;">
       <div class="admin-grid">
         <section class="panel-box">
@@ -247,6 +259,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       </div>
     </main>
 
+    <!-- ABA 3: GITHUB & SEGURANÇA -->
     <main class="container tab-pane" id="pane-config" style="margin-top: 28px;">
       <div class="panel-box" style="max-width: 680px;">
         <h2>Publicação Automática no GitHub (1 Clique)</h2>
@@ -334,6 +347,54 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       document.getElementById('pane-' + aba).classList.add('active');
     }
 
+    function atualizarPreviewCard() {
+      const nome = document.getElementById('pNome').value.trim() || "Nome do Produto aparecerá aqui";
+      const cat = document.getElementById('pCategoria').value;
+      const queda = document.getElementById('pQueda').value || 0;
+      const specs = document.getElementById('pSpecs').value.trim() || "Especificações técnicas";
+      const urls = document.getElementById('pImagensLista').value.split('\n').map(u => u.trim()).filter(Boolean);
+      const imgCapa = urls[0] || "https://via.placeholder.com/300?text=Sem+Imagem";
+
+      const ofertas = [];
+      document.querySelectorAll('.oferta-item').forEach(el => {
+        const preco = parseFloat(el.querySelector('.of-preco').value);
+        if (!isNaN(preco)) {
+          ofertas.push({
+            loja: el.querySelector('.of-loja').value,
+            preco,
+            parcelamento: el.querySelector('.of-parc').value || "À vista"
+          });
+        }
+      });
+
+      ofertas.sort((a, b) => a.preco - b.preco);
+      const melhor = ofertas[0] || { loja: "Loja", preco: 0, parcelamento: "10x sem juros" };
+      const precoFormatado = melhor.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      document.getElementById('liveCardPreview').innerHTML = `
+        <article class="product-card" style="cursor:default;">
+          <div class="card-badges">
+            <span class="badge-drop">📉 -${queda}% hoje</span>
+            <span class="badge-stores">${Math.max(1, ofertas.length)} loja(s)</span>
+          </div>
+          <div class="card-img">
+            <img src="${imgCapa}" alt="Preview" onerror="this.src='https://via.placeholder.com/300?text=Erro+na+URL'">
+          </div>
+          <div class="card-body">
+            <span class="card-cat">${cat}</span>
+            <h3 class="card-title">${nome}</h3>
+            <p class="card-specs">${specs}</p>
+            <div class="card-price-block">
+              <span class="price-from">Menor preço via <strong>${melhor.loja}</strong></span>
+              <div class="price-main">${precoFormatado}</div>
+              <span class="price-installment">${melhor.parcelamento}</span>
+            </div>
+            <button type="button" class="btn-card-compare">Comparar em ${Math.max(1, ofertas.length)} loja(s)</button>
+          </div>
+        </article>
+      `;
+    }
+
     function atualizarPreviewGaleria() {
       const urls = document.getElementById('pImagensLista').value
         .split('\n').map(u => u.trim()).filter(Boolean);
@@ -341,7 +402,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       box.innerHTML = urls.map((u, idx) => `
         <div class="gallery-thumb-box">
           <img src="${u}" alt="Foto ${idx + 1}">
-          <button type="button" onclick="removerFotoGaleria(${idx})" title="Remover foto">✕</button>
+          <button type="button" onclick="removerFotoGaleria(${idx})" title="Remover">✕</button>
         </div>
       `).join('');
     }
@@ -352,6 +413,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       urls.splice(index, 1);
       document.getElementById('pImagensLista').value = urls.join('\n');
       atualizarPreviewGaleria();
+      atualizarPreviewCard();
     }
 
     async function puxarDadosDoLink() {
@@ -362,7 +424,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       const status = document.getElementById('importStatus');
       btn.disabled = true;
       btn.innerText = "Buscando...";
-      status.innerText = "Lendo informações e galeria de fotos da loja...";
+      status.innerText = "Lendo dados e imagens da loja...";
 
       try {
         const res = await fetch('/api/puxar-produto?url=' + encodeURIComponent(linkOriginal));
@@ -376,6 +438,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
         }
 
         if (dados.nome) document.getElementById('pNome').value = dados.nome;
+        if (dados.specsResumo) document.getElementById('pSpecs').value = dados.specsResumo;
 
         const listaFotos = (dados.imagens && dados.imagens.length > 0)
           ? dados.imagens
@@ -407,21 +470,20 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
           });
         }
 
-        if (precoVal) {
-          const pBase = Math.round(precoVal * 1.15);
-          document.getElementById('pHistorico').value = `${pBase}, ${Math.round(precoVal * 1.12)}, ${Math.round(precoVal * 1.08)}, ${Math.round(precoVal * 1.05)}, ${Math.round(precoVal * 1.02)}, ${precoVal}`;
-        }
-
         if (dados.ficha && Object.keys(dados.ficha).length > 0) {
           document.getElementById('fichaContainer').innerHTML = "";
           Object.entries(dados.ficha).forEach(([k, v]) => adicionarCampoFicha(k, v));
-          const resumo = Object.values(dados.ficha).slice(0, 3).join(' • ');
-          if (resumo) document.getElementById('pSpecs').value = resumo;
         }
 
-        status.innerText = `✅ Importado de ${dados.loja} (${listaFotos.length} foto(s) no carrossel)!`;
+        atualizarPreviewCard();
+
+        if (!dados.nome || listaFotos.length === 0) {
+          status.innerText = `⚠️ A ${dados.loja} bloqueou parte dos dados. Preencha o título/foto manualmente e confira no preview ao lado.`;
+        } else {
+          status.innerText = `✅ Importado de ${dados.loja} (${listaFotos.length} foto(s)). Revise no preview ao lado e salve!`;
+        }
       } catch (e) {
-        status.innerText = "⚠️ Erro ao conectar com a função de extração.";
+        status.innerText = "⚠️ Erro ao conectar com o extrator.";
       } finally {
         btn.disabled = false;
         btn.innerText = "Puxar Dados";
@@ -446,8 +508,8 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       renderizarListaAdmin();
       if (document.getElementById('ofertasContainer').children.length === 0) {
         adicionarCampoOferta();
-        adicionarCampoFicha("Marca", "");
       }
+      atualizarPreviewCard();
     }
 
     function preencherCamposLayout() {
@@ -474,7 +536,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
         bannerSub: document.getElementById('cfgBannerSub').value,
         topBar: document.getElementById('cfgTopBar').value
       };
-      alert("Configurações aplicadas! Clique em '🚀 Publicar Direto no Site' ou '💾 Baixar JSON'.");
+      alert("Configurações aplicadas! Clique em '🚀 Publicar Direto no Site'.");
     }
 
     function salvarCredenciaisGithub() {
@@ -529,11 +591,11 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       const div = document.createElement('div');
       div.className = 'offer-card-admin oferta-item';
       div.innerHTML = `
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">Remover</button>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove(); atualizarPreviewCard();">Remover</button>
         <div class="row-2" style="margin-bottom:8px;">
           <div>
             <label style="font-size:0.78rem;">Loja</label>
-            <select class="of-loja">
+            <select class="of-loja" onchange="atualizarPreviewCard()">
               <option ${dados.loja === 'Amazon' ? 'selected' : ''}>Amazon</option>
               <option ${dados.loja === 'Mercado Livre' ? 'selected' : ''}>Mercado Livre</option>
               <option ${dados.loja === 'Shopee' ? 'selected' : ''}>Shopee</option>
@@ -543,13 +605,13 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
           </div>
           <div>
             <label style="font-size:0.78rem;">Preço à Vista (R$)</label>
-            <input type="number" step="0.01" class="of-preco" value="${dados.preco}" placeholder="729.90">
+            <input type="number" step="0.01" class="of-preco" value="${dados.preco}" placeholder="729.90" oninput="atualizarPreviewCard()">
           </div>
         </div>
         <div class="row-2" style="margin-bottom:8px;">
           <div>
-            <label style="font-size:0.78rem;">ID do Anúncio (Ex: MLB123456)</label>
-            <input type="text" class="of-id" value="${dados.idExterno || ''}">
+            <label style="font-size:0.78rem;">Parcelamento</label>
+            <input type="text" class="of-parc" value="${dados.parcelamento}" oninput="atualizarPreviewCard()">
           </div>
           <div>
             <label style="font-size:0.78rem;">Frete / Info</label>
@@ -558,16 +620,17 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
         </div>
         <div class="row-2">
           <div>
-            <label style="font-size:0.78rem;">Parcelamento</label>
-            <input type="text" class="of-parc" value="${dados.parcelamento}">
+            <label style="font-size:0.78rem;">Seu Link de Afiliado</label>
+            <input type="url" class="of-link" value="${dados.link}" placeholder="https://...">
           </div>
           <div>
-            <label style="font-size:0.78rem;">Seu Link de Afiliado</label>
-            <input type="url" class="of-link" value="${dados.link}">
+            <label style="font-size:0.78rem;">ID Auto-Preço (Opcional MLB...)</label>
+            <input type="text" class="of-id" value="${dados.idExterno || ''}" placeholder="MLB123456">
           </div>
         </div>
       `;
       document.getElementById('ofertasContainer').appendChild(div);
+      atualizarPreviewCard();
     }
 
     function adicionarCampoFicha(chave = "", valor = "") {
@@ -575,19 +638,33 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       div.className = 'row-2 ficha-item';
       div.style.marginBottom = '8px';
       div.innerHTML = `
-        <input type="text" class="f-chave" value="${chave}" placeholder="Ex: Memória RAM">
+        <input type="text" class="f-chave" value="${chave}" placeholder="Ex: Marca">
         <div style="display:flex; gap:6px;">
-          <input type="text" class="f-valor" value="${valor}" placeholder="Ex: 8 GB">
+          <input type="text" class="f-valor" value="${valor}" placeholder="Ex: AMD">
           <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#fee2e2; color:#b91c1c; border:none; padding:0 10px; border-radius:6px; cursor:pointer;">✕</button>
         </div>
       `;
       document.getElementById('fichaContainer').appendChild(div);
     }
 
+    function gerarHistoricoAutomatico(precoAtual, quedaPerc) {
+      const fator = 1 + ((quedaPerc || 10) / 100);
+      const topo = Math.round(precoAtual * fator);
+      return [
+        topo,
+        Math.round(topo * 0.98),
+        Math.round(topo * 0.95),
+        Math.round(topo * 0.93),
+        Math.round(precoAtual * 1.03),
+        precoAtual
+      ];
+    }
+
     function salvarProduto() {
       const editId = document.getElementById('editId').value;
       const nome = document.getElementById('pNome').value.trim();
-      if (!nome) return alert("Digite o nome do produto!");
+      if (!nome) return alert("Digite o título do produto!");
+
       const ofertas = [];
       document.querySelectorAll('.oferta-item').forEach(el => {
         const preco = parseFloat(el.querySelector('.of-preco').value);
@@ -595,14 +672,14 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
           ofertas.push({
             loja: el.querySelector('.of-loja').value,
             idExterno: el.querySelector('.of-id').value.trim(),
-            preco: preco,
-            frete: el.querySelector('.of-frete').value.trim() || "Consultar frete",
+            preco,
+            frete: el.querySelector('.of-frete').value.trim() || "Frete Grátis",
             parcelamento: el.querySelector('.of-parc').value.trim() || "À vista",
             link: el.querySelector('.of-link').value.trim() || "#"
           });
         }
       });
-      if (ofertas.length === 0) return alert("Adicione pelo menos uma oferta com preço!");
+      if (ofertas.length === 0) return alert("Informe pelo menos uma loja com preço válido!");
 
       const imagensArray = document.getElementById('pImagensLista').value
         .split('\n').map(u => u.trim()).filter(Boolean);
@@ -614,29 +691,34 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
         const v = el.querySelector('.f-valor').value.trim();
         if (k && v) ficha[k] = v;
       });
-      const histRaw = document.getElementById('pHistorico').value.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+
+      const menorPreco = Math.min(...ofertas.map(o => o.preco));
+      const queda = parseInt(document.getElementById('pQueda').value) || 0;
+
       const novoObj = {
         id: editId ? parseInt(editId) : Date.now(),
         nome,
         categoria: document.getElementById('pCategoria').value,
-        specsResumo: document.getElementById('pSpecs').value.trim(),
+        specsResumo: document.getElementById('pSpecs').value.trim() || "Oferta verificada GarimpaTech",
         imagem: imagemCapa,
         imagens: imagensArray.length ? imagensArray : [imagemCapa],
-        quedaPercentual: parseInt(document.getElementById('pQueda').value) || 0,
+        quedaPercentual: queda,
         meses: ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
-        historico: histRaw.length ? histRaw : [ofertas[0].preco],
+        historico: gerarHistoricoAutomatico(menorPreco, queda),
         ficha,
         ofertas
       };
+
       if (editId) {
         const idx = produtos.findIndex(p => p.id === parseInt(editId));
         produtos[idx] = novoObj;
       } else {
         produtos.unshift(novoObj);
       }
+
       limparFormulario();
       renderizarListaAdmin();
-      alert("Produto salvo na lista! Clique em '🚀 Publicar Direto no Site'.");
+      alert("Produto salvo! Clique em '🚀 Publicar Direto no Site' no topo para atualizar o ar.");
     }
 
     function editarProduto(id) {
@@ -652,11 +734,12 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       document.getElementById('pImagensLista').value = listaFotos.join('\n');
       atualizarPreviewGaleria();
 
-      document.getElementById('pHistorico').value = p.historico.join(', ');
       document.getElementById('ofertasContainer').innerHTML = "";
       p.ofertas.forEach(of => adicionarCampoOferta(of));
       document.getElementById('fichaContainer').innerHTML = "";
       Object.entries(p.ficha || {}).forEach(([k, v]) => adicionarCampoFicha(k, v));
+      atualizarPreviewCard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function excluirProduto(id) {
@@ -666,7 +749,7 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
     }
 
     function limparFormulario() {
-      document.getElementById('formTitle').innerText = "Cadastrar Novo Produto Tech";
+      document.getElementById('formTitle').innerText = "Cadastrar Produto Tech";
       document.getElementById('editId').value = "";
       document.getElementById('urlImportInput').value = "";
       document.getElementById('importStatus').innerText = "";
@@ -677,21 +760,20 @@ https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
       document.getElementById('ofertasContainer').innerHTML = "";
       document.getElementById('fichaContainer').innerHTML = "";
       adicionarCampoOferta();
-      adicionarCampoFicha("Marca", "");
+      atualizarPreviewCard();
     }
 
     function renderizarListaAdmin() {
       document.getElementById('totalProds').innerText = produtos.length;
       document.getElementById('listaProdutosAdmin').innerHTML = produtos.map(p => {
         const menor = Math.min(...p.ofertas.map(o => o.preco));
-        const qtdFotos = (p.imagens && p.imagens.length) ? p.imagens.length : 1;
         return `
           <div class="prod-list-item">
-            <div style="display:flex; align-items:center; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px; min-width:0;">
               <img src="${p.imagem}">
-              <div>
-                <strong style="font-size:0.9rem; display:block;">${p.nome}</strong>
-                <small style="color:var(--success); font-weight:700;">Menor: R$ ${menor.toFixed(2)} • ${p.ofertas.length} loja(s) • ${qtdFotos} foto(s)</small>
+              <div style="min-width:0;">
+                <strong style="font-size:0.88rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.nome}</strong>
+                <small style="color:var(--success); font-weight:700;">R$ ${menor.toFixed(2)} • ${p.ofertas.length} loja(s)</small>
               </div>
             </div>
             <div class="action-btns">
