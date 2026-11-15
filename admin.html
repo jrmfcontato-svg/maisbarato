@@ -277,8 +277,8 @@
   </div>
 
   <script>
-    // Senha padrão atual: Garimpa@2026 (em SHA-256)
-    const SENHA_HASH = "8e6c0f76c7712c9b8f39a1c1765f156789165a7e5c3e19e257c3b8e8584550d4";
+    // Senha atual: Garimpa@2026
+    const SENHA_HASH = "e3628b9227f603f039c44140e7d4789626a0c6a662a684b56a0e9a502d209840";
 
     async function sha256(texto) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
@@ -286,7 +286,7 @@
     }
 
     async function verificarSenha() {
-      const digitada = document.getElementById('adminPassInput').value;
+      const digitada = document.getElementById('adminPassInput').value.trim();
       const hash = await sha256(digitada);
       if (hash === SENHA_HASH) {
         sessionStorage.setItem('garimpatech_auth', SENHA_HASH);
@@ -308,7 +308,7 @@
     }
 
     async function gerarNovoHash() {
-      const txt = document.getElementById('novaSenhaTexto').value;
+      const txt = document.getElementById('novaSenhaTexto').value.trim();
       if (!txt) return alert("Digite uma senha primeiro.");
       document.getElementById('hashGeradoOutput').value = await sha256(txt);
     }
