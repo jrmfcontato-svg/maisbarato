@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "15/11/2026 às 14:30",
+  "ultimaAtualizacao": "15/11/2026, 15:42",
   "produtos": [
     {
       "id": 1,
@@ -8,8 +8,22 @@
       "specsResumo": "6 Núcleos • 12 Threads • Socket AM4 • PCIe 4.0",
       "imagem": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&q=80",
       "quedaPercentual": 14,
-      "meses": ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
-      "historico": [899, 860, 849, 810, 789, 729.90],
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        899,
+        860,
+        849,
+        810,
+        789,
+        729.9
+      ],
       "ficha": {
         "Marca": "AMD",
         "Modelo": "100-100000927BOX",
@@ -21,7 +35,7 @@
         {
           "loja": "Amazon",
           "idExterno": "B09VCHR1HZ",
-          "preco": 729.90,
+          "preco": 729.9,
           "frete": "Frete Grátis Prime",
           "parcelamento": "10x de R$ 72,99 sem juros",
           "link": "#amazon"
@@ -29,7 +43,7 @@
         {
           "loja": "KaBuM!",
           "idExterno": "320798",
-          "preco": 749.90,
+          "preco": 749.9,
           "frete": "R$ 19,90",
           "parcelamento": "10x de R$ 83,32",
           "link": "#kabum"
@@ -37,7 +51,7 @@
         {
           "loja": "Mercado Livre",
           "idExterno": "MLB2654123456",
-          "preco": 779.00,
+          "preco": 779,
           "frete": "Frete Grátis Full",
           "parcelamento": "12x de R$ 64,91 sem juros",
           "link": "#ml"
@@ -51,8 +65,22 @@
       "specsResumo": "Tela 6.1'' Dynamic AMOLED 120Hz • Snapdragon 8 Gen 2 • 256GB",
       "imagem": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500&q=80",
       "quedaPercentual": 18,
-      "meses": ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
-      "historico": [3499, 3300, 3150, 2999, 2890, 2799.00],
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        3499,
+        3300,
+        3150,
+        2999,
+        2890,
+        2799
+      ],
       "ficha": {
         "Tela": "6.1 polegadas FHD+ 120Hz",
         "Processador": "Snapdragon 8 Gen 2 for Galaxy",
@@ -64,7 +92,7 @@
         {
           "loja": "Mercado Livre",
           "idExterno": "MLB3456789123",
-          "preco": 2799.00,
+          "preco": 2799,
           "frete": "Frete Grátis Full",
           "parcelamento": "10x de R$ 279,90 sem juros",
           "link": "#ml"
@@ -72,7 +100,7 @@
         {
           "loja": "Magalu",
           "idExterno": "236541200",
-          "preco": 2849.00,
+          "preco": 2849,
           "frete": "Retira Grátis",
           "parcelamento": "10x de R$ 284,90",
           "link": "#magalu"
@@ -80,7 +108,7 @@
         {
           "loja": "Amazon",
           "idExterno": "B0BS462123",
-          "preco": 2899.90,
+          "preco": 2899.9,
           "frete": "Frete Grátis",
           "parcelamento": "10x de R$ 289,99",
           "link": "#amazon"
@@ -94,8 +122,22 @@
       "specsResumo": "Painel IPS • 144Hz • 1ms (GtG) • DisplayPort e HDMI",
       "imagem": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80",
       "quedaPercentual": 11,
-      "meses": ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
-      "historico": [1049, 999, 960, 929, 899, 849.00],
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        1049,
+        999,
+        960,
+        929,
+        899,
+        849
+      ],
       "ficha": {
         "Tamanho": "23.8 polegadas",
         "Painel": "IPS Antirreflexo",
@@ -107,7 +149,7 @@
         {
           "loja": "Amazon",
           "idExterno": "B095J68CKG",
-          "preco": 849.00,
+          "preco": 849,
           "frete": "Frete Grátis",
           "parcelamento": "10x de R$ 84,90 sem juros",
           "link": "#amazon"
@@ -115,7 +157,7 @@
         {
           "loja": "Shopee",
           "idExterno": "1982371923",
-          "preco": 869.90,
+          "preco": 869.9,
           "frete": "Cupom Frete Grátis",
           "parcelamento": "6x de R$ 144,98",
           "link": "#shopee"
@@ -123,7 +165,7 @@
         {
           "loja": "KaBuM!",
           "idExterno": "111160",
-          "preco": 889.90,
+          "preco": 889.9,
           "frete": "R$ 24,50",
           "parcelamento": "10x de R$ 98,87",
           "link": "#kabum"
