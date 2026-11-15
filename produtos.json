@@ -1,263 +1,184 @@
-{
-  "ultimaAtualizacao": "15/11/2026, 18:25",
-  "config": {
-    "corPrimaria": "#6d28d9",
-    "corSecundaria": "#4c1d95",
-    "corDestaque": "#facc15",
-    "colunas": "4",
-    "mostrarBanner": "sim",
-    "bannerPill": "HISTÓRICO DE PREÇOS REAL",
-    "bannerTitulo": "No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho",
-    "bannerSub": "Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.",
-    "topBar": "⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech"
-  },
-  "produtos": [
-    {
-      "id": 1794777938097,
-      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAyH0cgHLDGjRgfWDKwyQIHPBHLdujb6POHDx8WDYd6nXKFcM9dcY8gEGTW_MWS9OwdPGPcXEgS2yTnqHcJ83e0IF4Xnz3Qi9uarJsZvPI1jTPoGcXjaMigHz4jsAJwxqRnZFqGe_IEsc8zC8VnNd9sh2JfIEcHYXEaoKKzLufK_hxskLZbKGma4N5OBel1k4tG9eK0&mmp_pid=an_18352500843&uls_trackid=574rbhcp00bu&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuupky61kioq",
-      "categoria": "Hardware",
-      "specsResumo": "",
-      "imagem": "https://deo.shopeemobile.com/shopee/shopee-mobilemall-live-sg/assets/c68ff78f5fd71182.png",
-      "imagens": [
-        "https://deo.shopeemobile.com/shopee/shopee-mobilemall-live-sg/assets/c68ff78f5fd71182.png"
-      ],
-      "quedaPercentual": 10,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        950,
-        920,
-        890,
-        850,
-        810,
-        750
-      ],
-      "ficha": {},
-      "ofertas": [
-        {
-          "loja": "Shopee",
-          "idExterno": "",
-          "preco": 313.73,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x sem juros",
-          "link": "https://s.shopee.com.br/4VeOPrHqmU"
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const { url } = req.query;
+  if (!url) return res.status(400).json({ erro: 'Informe a URL do produto.' });
+
+  try {
+    let urlFinal = url.trim();
+    let html = '';
+
+    try {
+      const resp = await fetch(urlFinal, {
+        redirect: 'follow',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
         }
-      ]
-    },
-    {
-      "id": 1794777786736,
-      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAwIGo4PIJPVdmQHllLvhxs_arjowCGRAxjlxXxAufM5I3mbrVF-wL3vBD6dCKKrWw-SS7UEfNOE37SvI4LvwbME5fPeN8mG-AVDSN4NYjSPSEkPVvvH5ZBwWIR2Td6ozK8qVg2Bl2_kiMaX6zqQzDUE9tuzlLEBgdp20Otz868V3tQy1v2zvhHOSkchaXdd7HTXm0w&mmp_pid=an_18352500843&uls_trackid=574rb22101l7&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuup8epz9qm9",
-      "categoria": "Hardware",
-      "specsResumo": "",
-      "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webp",
-      "imagens": [
-        "https://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webp"
-      ],
-      "quedaPercentual": 10,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        950,
-        920,
-        890,
-        850,
-        810,
-        750
-      ],
-      "ficha": {},
-      "ofertas": [
-        {
-          "loja": "Shopee",
-          "idExterno": "",
-          "preco": 313.73,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x sem juros",
-          "link": "https://s.shopee.com.br/4VeOPrHqmU"
+      });
+      urlFinal = resp.url || urlFinal;
+      html = await resp.text();
+    } catch (e) {}
+
+    let loja = 'Amazon';
+    if (urlFinal.includes('mercadolivre') || urlFinal.includes('mercadolibre')) loja = 'Mercado Livre';
+    else if (urlFinal.includes('shopee')) loja = 'Shopee';
+    else if (urlFinal.includes('kabum')) loja = 'KaBuM!';
+    else if (urlFinal.includes('magazineluiza') || urlFinal.includes('magalu')) loja = 'Magalu';
+    else if (urlFinal.includes('amazon')) loja = 'Amazon';
+
+    const limparTitulo = (raw) => {
+      if (!raw) return '';
+      let t = raw
+        .replace(/"/g, '"')
+        .replace(/&/g, '&')
+        .replace(/'/g, "'")
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/\s*[:|-]\s*(Amazon\.com\.br|Mercado Livre|Shopee Brasil|KaBuM!|Magazine Luiza|Magalu).*$/i, '')
+        .replace(/^(Compre|Oferta|Promoção)\s+/i, '')
+        .replace(/\s+com\s+o\s+melhor\s+preço.*$/i, '')
+        .trim();
+
+      if (t.includes('__mobile__') || t.includes('utm_') || t.includes('mmp_pid') || /^\d+\?/.test(t) || t.length < 4) {
+        return '';
+      }
+      return t;
+    };
+
+    const melhorarResolucaoImagem = (imgUrl) => {
+      if (!imgUrl) return '';
+      let u = imgUrl.replace(/\\u002F/g, '/').trim();
+      // Mercado Livre: troca miniatura -I.jpg por alta resolução -O.jpg
+      if (u.includes('mlstatic.com')) {
+        u = u.replace(/-[IV]\.(jpg|jpeg|webp|png)/i, '-O.$1');
+      }
+      // Amazon: remove redimensionamento ._AC_SX300_. para pegar imagem limpa
+      if (u.includes('media-amazon.com')) {
+        u = u.replace(/\._AC_[A-Z0-9_,]+_\./i, '.');
+      }
+      return u;
+    };
+
+    const imagemValida = (imgUrl) => {
+      if (!imgUrl || !imgUrl.startsWith('http')) return false;
+      const bloqueadas = ['logo', 'icon', 'sprite', 'favicon', 'shopee-pcmall', 'nav-logo', 'placeholder'];
+      return !bloqueadas.some(b => imgUrl.toLowerCase().includes(b));
+    };
+
+    // 1. Mercado Livre via API Oficial
+    const matchMlb = (urlFinal + ' ' + html).match(/MLB-?(\d{7,12})/i);
+    if (loja === 'Mercado Livre' && matchMlb) {
+      const idMlb = 'MLB' + matchMlb[1];
+      const mlRes = await fetch(`https://api.mercadolibre.com/items/${idMlb}`);
+      if (mlRes.ok) {
+        const item = await mlRes.json();
+        const ficha = {};
+        const resumoLista = [];
+
+        if (Array.isArray(item.attributes)) {
+          item.attributes.forEach(attr => {
+            if (attr.name && attr.value_name && attr.value_name.length < 40) {
+              if (Object.keys(ficha).length < 6) ficha[attr.name] = attr.value_name;
+              if (['BRAND', 'MODEL', 'CAPACITY', 'PROCESSOR_MODEL', 'RAM_MEMORY'].includes(attr.id)) {
+                resumoLista.push(attr.value_name);
+              }
+            }
+          });
         }
-      ]
-    },
-    {
-      "id": 1,
-      "nome": "Processador AMD Ryzen 5 5600, 3.5GHz (4.4GHz Max Turbo), Cache 35MB, AM4",
-      "categoria": "Hardware",
-      "specsResumo": "6 Núcleos • 12 Threads • Socket AM4 • PCIe 4.0",
-      "imagem": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&q=80",
-      "quedaPercentual": 14,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        899,
-        860,
-        849,
-        810,
-        789,
-        729.9
-      ],
-      "ficha": {
-        "Marca": "AMD",
-        "Modelo": "100-100000927BOX",
-        "Núcleos / Threads": "6 / 12",
-        "Clock Básico / Boost": "3.5 GHz / 4.4 GHz",
-        "TDP": "65W"
-      },
-      "ofertas": [
-        {
-          "loja": "Amazon",
-          "idExterno": "B09VCHR1HZ",
-          "preco": 729.9,
-          "frete": "Frete Grátis Prime",
-          "parcelamento": "10x de R$ 72,99 sem juros",
-          "link": "#amazon"
-        },
-        {
-          "loja": "KaBuM!",
-          "idExterno": "320798",
-          "preco": 749.9,
-          "frete": "R$ 19,90",
-          "parcelamento": "10x de R$ 83,32",
-          "link": "#kabum"
-        },
-        {
-          "loja": "Mercado Livre",
-          "idExterno": "MLB2654123456",
-          "preco": 779,
-          "frete": "Frete Grátis Full",
-          "parcelamento": "12x de R$ 64,91 sem juros",
-          "link": "#ml"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "nome": "Smartphone Samsung Galaxy S23 256GB Preto 5G - 8GB RAM Câmera Tripla",
-      "categoria": "Smartphones",
-      "specsResumo": "Tela 6.1'' Dynamic AMOLED 120Hz • Snapdragon 8 Gen 2 • 256GB",
-      "imagem": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500&q=80",
-      "quedaPercentual": 18,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        3499,
-        3300,
-        3150,
-        2999,
-        2890,
-        2799
-      ],
-      "ficha": {
-        "Tela": "6.1 polegadas FHD+ 120Hz",
-        "Processador": "Snapdragon 8 Gen 2 for Galaxy",
-        "Memória RAM": "8 GB",
-        "Armazenamento": "256 GB",
-        "Bateria": "3.900 mAh"
-      },
-      "ofertas": [
-        {
-          "loja": "Mercado Livre",
-          "idExterno": "MLB3456789123",
-          "preco": 2799,
-          "frete": "Frete Grátis Full",
-          "parcelamento": "10x de R$ 279,90 sem juros",
-          "link": "#ml"
-        },
-        {
-          "loja": "Magalu",
-          "idExterno": "236541200",
-          "preco": 2849,
-          "frete": "Retira Grátis",
-          "parcelamento": "10x de R$ 284,90",
-          "link": "#magalu"
-        },
-        {
-          "loja": "Amazon",
-          "idExterno": "B0BS462123",
-          "preco": 2899.9,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x de R$ 289,99",
-          "link": "#amazon"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "nome": "Monitor Gamer LG UltraGear 24'' IPS, Full HD, 144Hz, 1ms, FreeSync",
-      "categoria": "Perifericos",
-      "specsResumo": "Painel IPS • 144Hz • 1ms (GtG) • DisplayPort e HDMI",
-      "imagem": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80",
-      "quedaPercentual": 11,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        1049,
-        999,
-        960,
-        929,
-        899,
-        849
-      ],
-      "ficha": {
-        "Tamanho": "23.8 polegadas",
-        "Painel": "IPS Antirreflexo",
-        "Taxa de Atualização": "144Hz",
-        "Tempo de Resposta": "1ms",
-        "Conexões": "2x HDMI, 1x DisplayPort"
-      },
-      "ofertas": [
-        {
-          "loja": "Amazon",
-          "idExterno": "B095J68CKG",
-          "preco": 849,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x de R$ 84,90 sem juros",
-          "link": "#amazon"
-        },
-        {
-          "loja": "Shopee",
-          "idExterno": "1982371923",
-          "preco": 869.9,
-          "frete": "Cupom Frete Grátis",
-          "parcelamento": "6x de R$ 144,98",
-          "link": "#shopee"
-        },
-        {
-          "loja": "KaBuM!",
-          "idExterno": "111160",
-          "preco": 889.9,
-          "frete": "R$ 24,50",
-          "parcelamento": "10x de R$ 98,87",
-          "link": "#kabum"
-        }
-      ]
+
+        const listaImagens = Array.isArray(item.pictures)
+          ? item.pictures.map(p => melhorarResolucaoImagem(p.secure_url || p.url)).filter(imagemValida).slice(0, 6)
+          : (item.thumbnail ? [melhorarResolucaoImagem(item.thumbnail)] : []);
+
+        return res.status(200).json({
+          sucesso: true,
+          loja: 'Mercado Livre',
+          idExterno: idMlb,
+          nome: limparTitulo(item.title),
+          specsResumo: resumoLista.slice(0, 3).join(' • '),
+          preco: item.price || '',
+          imagem: listaImagens[0] || '',
+          imagens: listaImagens,
+          frete: item.shipping?.free_shipping ? 'Frete Grátis' : 'Consultar frete',
+          parcelamento: 'Até 12x no cartão',
+          ficha
+        });
+      }
     }
-  ]
+
+    // 2. Extração via Metadados HTML + JSON-LD
+    const pegarMeta = (prop) => {
+      const r1 = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
+      const r2 = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
+      return (html.match(r1)?.[1] || html.match(r2)?.[1] || '').trim();
+    };
+
+    let nome = limparTitulo(pegarMeta('og:title') || pegarMeta('twitter:title'));
+    let precoRaw = pegarMeta('product:price:amount') || pegarMeta('og:price:amount');
+    const galeriaSet = new Set();
+
+    const metaImg = melhorarResolucaoImagem(pegarMeta('og:image') || pegarMeta('twitter:image'));
+    if (imagemValida(metaImg)) galeriaSet.add(metaImg);
+
+    if (html) {
+      const matchesHiRes = html.matchAll(/"(?:hiRes|large|secure_url|image)"\s*:\s*"(https?:[^"]+\.(?:jpg|jpeg|png|webp)[^"]*)"/gi);
+      for (const m of matchesHiRes) {
+        const candidata = melhorarResolucaoImagem(m[1]);
+        if (imagemValida(candidata)) galeriaSet.add(candidata);
+        if (galeriaSet.size >= 6) break;
+      }
+
+      if (!precoRaw) {
+        const matchJsonPrice = html.match(/"price"\s*:\s*"?(\d+[.,]\d{2})"?/i) ||
+                               html.match(/R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})/);
+        if (matchJsonPrice) {
+          precoRaw = matchJsonPrice[1].replace(/\./g, '').replace(',', '.');
+        }
+      }
+    }
+
+    // Slug da Shopee caso venha bloqueada
+    if (loja === 'Shopee' && !nome) {
+      const slugMatch = urlFinal.match(/shopee\.com\.br\/([^/?#]+)-i\.\d+\.\d+/i);
+      if (slugMatch) {
+        nome = limparTitulo(decodeURIComponent(slugMatch[1]).replace(/-/g, ' '));
+      }
+    }
+
+    // Fallback Microlink
+    if (!nome || galeriaSet.size === 0) {
+      const urlLimpa = urlFinal.split('?')[0];
+      const microRes = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(urlLimpa)}`);
+      if (microRes.ok) {
+        const micro = await microRes.json();
+        if (micro.data) {
+          if (!nome) nome = limparTitulo(micro.data.title);
+          const mImg = melhorarResolucaoImagem(micro.data.image?.url);
+          if (imagemValida(mImg)) galeriaSet.add(mImg);
+        }
+      }
+    }
+
+    const listaFinal = Array.from(galeriaSet).slice(0, 6);
+
+    return res.status(200).json({
+      sucesso: true,
+      loja,
+      idExterno: matchMlb ? 'MLB' + matchMlb[1] : '',
+      nome,
+      specsResumo: '',
+      preco: precoRaw ? parseFloat(precoRaw) : '',
+      imagem: listaFinal[0] || '',
+      imagens: listaFinal,
+      frete: 'Frete Grátis',
+      parcelamento: '10x sem juros',
+      ficha: {}
+    });
+
+  } catch (erro) {
+    return res.status(500).json({ erro: 'Falha ao ler link: ' + erro.message });
+  }
 }
