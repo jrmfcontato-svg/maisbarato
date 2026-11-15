@@ -1,4 +1,4 @@
-name: Atualizar Precos MaisBarato
+name: Atualizar Precos GarimpaTech
 
 on:
   schedule:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Salvar produtos.json atualizado
         run: |
-          git config --local user.email "bot@maisbarato.com"
-          git config --local user.name "MaisBarato Bot"
+          git config --local user.email "bot@garimpatech.com.br"
+          git config --local user.name "GarimpaTech Bot"
           git add produtos.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Atualizacao automatica de precos" && git push)
