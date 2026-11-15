@@ -1,184 +1,54 @@
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const { url } = req.query;
-  if (!url) return res.status(400).json({ erro: 'Informe a URL do produto.' });
-
-  try {
-    let urlFinal = url.trim();
-    let html = '';
-
-    try {
-      const resp = await fetch(urlFinal, {
-        redirect: 'follow',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-          'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
+{
+  "ultimaAtualizacao": "15/11/2026, 18:37",
+  "config": {
+    "corPrimaria": "#6d28d9",
+    "corSecundaria": "#4c1d95",
+    "corDestaque": "#facc15",
+    "colunas": "4",
+    "mostrarBanner": "sim",
+    "bannerPill": "HISTÓRICO DE PREÇOS REAL",
+    "bannerTitulo": "No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho",
+    "bannerSub": "Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.",
+    "topBar": "⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech"
+  },
+  "produtos": [
+    {
+      "id": 1794778631580,
+      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAxIsUDTVieslMkyDqQNUaEGpqiJgCi_mrqCNm168b4ihRijjneUz8YCwkKZHqCWUxptw2LKJ_oNX61jFA42yzrkCEwD2nth1S-fAez6KZSjNFMd2iAqLnlxE36BOhroEINAHKLfd6_s-VAAjC0dKy-tnPP3uryU5CqEYemwJU1fw2Z4sZLtypMSA1IptC5HvHVcU84&mmp_pid=an_18352500843&uls_trackid=574rdg2s00c4&utm_campaign=id_5aAXRfzWKjh&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuur483y3rco",
+      "categoria": "Hardware",
+      "specsResumo": "Oferta verificada GarimpaTech",
+      "imagem": "https://via.placeholder.com/300",
+      "imagens": [
+        "https://via.placeholder.com/300"
+      ],
+      "quedaPercentual": 20,
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        376,
+        368,
+        357,
+        350,
+        323,
+        313.73
+      ],
+      "ficha": {},
+      "ofertas": [
+        {
+          "loja": "Shopee",
+          "idExterno": "",
+          "preco": 313.73,
+          "frete": "Frete Grátis",
+          "parcelamento": "10x sem juros",
+          "link": "https://s.shopee.com.br/5fqLq0kqTa"
         }
-      });
-      urlFinal = resp.url || urlFinal;
-      html = await resp.text();
-    } catch (e) {}
-
-    let loja = 'Amazon';
-    if (urlFinal.includes('mercadolivre') || urlFinal.includes('mercadolibre')) loja = 'Mercado Livre';
-    else if (urlFinal.includes('shopee')) loja = 'Shopee';
-    else if (urlFinal.includes('kabum')) loja = 'KaBuM!';
-    else if (urlFinal.includes('magazineluiza') || urlFinal.includes('magalu')) loja = 'Magalu';
-    else if (urlFinal.includes('amazon')) loja = 'Amazon';
-
-    const limparTitulo = (raw) => {
-      if (!raw) return '';
-      let t = raw
-        .replace(/"/g, '"')
-        .replace(/&/g, '&')
-        .replace(/'/g, "'")
-        .replace(/</g, '<')
-        .replace(/>/g, '>')
-        .replace(/\s*[:|-]\s*(Amazon\.com\.br|Mercado Livre|Shopee Brasil|KaBuM!|Magazine Luiza|Magalu).*$/i, '')
-        .replace(/^(Compre|Oferta|Promoção)\s+/i, '')
-        .replace(/\s+com\s+o\s+melhor\s+preço.*$/i, '')
-        .trim();
-
-      if (t.includes('__mobile__') || t.includes('utm_') || t.includes('mmp_pid') || /^\d+\?/.test(t) || t.length < 4) {
-        return '';
-      }
-      return t;
-    };
-
-    const melhorarResolucaoImagem = (imgUrl) => {
-      if (!imgUrl) return '';
-      let u = imgUrl.replace(/\\u002F/g, '/').trim();
-      // Mercado Livre: troca miniatura -I.jpg por alta resolução -O.jpg
-      if (u.includes('mlstatic.com')) {
-        u = u.replace(/-[IV]\.(jpg|jpeg|webp|png)/i, '-O.$1');
-      }
-      // Amazon: remove redimensionamento ._AC_SX300_. para pegar imagem limpa
-      if (u.includes('media-amazon.com')) {
-        u = u.replace(/\._AC_[A-Z0-9_,]+_\./i, '.');
-      }
-      return u;
-    };
-
-    const imagemValida = (imgUrl) => {
-      if (!imgUrl || !imgUrl.startsWith('http')) return false;
-      const bloqueadas = ['logo', 'icon', 'sprite', 'favicon', 'shopee-pcmall', 'nav-logo', 'placeholder'];
-      return !bloqueadas.some(b => imgUrl.toLowerCase().includes(b));
-    };
-
-    // 1. Mercado Livre via API Oficial
-    const matchMlb = (urlFinal + ' ' + html).match(/MLB-?(\d{7,12})/i);
-    if (loja === 'Mercado Livre' && matchMlb) {
-      const idMlb = 'MLB' + matchMlb[1];
-      const mlRes = await fetch(`https://api.mercadolibre.com/items/${idMlb}`);
-      if (mlRes.ok) {
-        const item = await mlRes.json();
-        const ficha = {};
-        const resumoLista = [];
-
-        if (Array.isArray(item.attributes)) {
-          item.attributes.forEach(attr => {
-            if (attr.name && attr.value_name && attr.value_name.length < 40) {
-              if (Object.keys(ficha).length < 6) ficha[attr.name] = attr.value_name;
-              if (['BRAND', 'MODEL', 'CAPACITY', 'PROCESSOR_MODEL', 'RAM_MEMORY'].includes(attr.id)) {
-                resumoLista.push(attr.value_name);
-              }
-            }
-          });
-        }
-
-        const listaImagens = Array.isArray(item.pictures)
-          ? item.pictures.map(p => melhorarResolucaoImagem(p.secure_url || p.url)).filter(imagemValida).slice(0, 6)
-          : (item.thumbnail ? [melhorarResolucaoImagem(item.thumbnail)] : []);
-
-        return res.status(200).json({
-          sucesso: true,
-          loja: 'Mercado Livre',
-          idExterno: idMlb,
-          nome: limparTitulo(item.title),
-          specsResumo: resumoLista.slice(0, 3).join(' • '),
-          preco: item.price || '',
-          imagem: listaImagens[0] || '',
-          imagens: listaImagens,
-          frete: item.shipping?.free_shipping ? 'Frete Grátis' : 'Consultar frete',
-          parcelamento: 'Até 12x no cartão',
-          ficha
-        });
-      }
+      ]
     }
-
-    // 2. Extração via Metadados HTML + JSON-LD
-    const pegarMeta = (prop) => {
-      const r1 = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
-      const r2 = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
-      return (html.match(r1)?.[1] || html.match(r2)?.[1] || '').trim();
-    };
-
-    let nome = limparTitulo(pegarMeta('og:title') || pegarMeta('twitter:title'));
-    let precoRaw = pegarMeta('product:price:amount') || pegarMeta('og:price:amount');
-    const galeriaSet = new Set();
-
-    const metaImg = melhorarResolucaoImagem(pegarMeta('og:image') || pegarMeta('twitter:image'));
-    if (imagemValida(metaImg)) galeriaSet.add(metaImg);
-
-    if (html) {
-      const matchesHiRes = html.matchAll(/"(?:hiRes|large|secure_url|image)"\s*:\s*"(https?:[^"]+\.(?:jpg|jpeg|png|webp)[^"]*)"/gi);
-      for (const m of matchesHiRes) {
-        const candidata = melhorarResolucaoImagem(m[1]);
-        if (imagemValida(candidata)) galeriaSet.add(candidata);
-        if (galeriaSet.size >= 6) break;
-      }
-
-      if (!precoRaw) {
-        const matchJsonPrice = html.match(/"price"\s*:\s*"?(\d+[.,]\d{2})"?/i) ||
-                               html.match(/R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})/);
-        if (matchJsonPrice) {
-          precoRaw = matchJsonPrice[1].replace(/\./g, '').replace(',', '.');
-        }
-      }
-    }
-
-    // Slug da Shopee caso venha bloqueada
-    if (loja === 'Shopee' && !nome) {
-      const slugMatch = urlFinal.match(/shopee\.com\.br\/([^/?#]+)-i\.\d+\.\d+/i);
-      if (slugMatch) {
-        nome = limparTitulo(decodeURIComponent(slugMatch[1]).replace(/-/g, ' '));
-      }
-    }
-
-    // Fallback Microlink
-    if (!nome || galeriaSet.size === 0) {
-      const urlLimpa = urlFinal.split('?')[0];
-      const microRes = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(urlLimpa)}`);
-      if (microRes.ok) {
-        const micro = await microRes.json();
-        if (micro.data) {
-          if (!nome) nome = limparTitulo(micro.data.title);
-          const mImg = melhorarResolucaoImagem(micro.data.image?.url);
-          if (imagemValida(mImg)) galeriaSet.add(mImg);
-        }
-      }
-    }
-
-    const listaFinal = Array.from(galeriaSet).slice(0, 6);
-
-    return res.status(200).json({
-      sucesso: true,
-      loja,
-      idExterno: matchMlb ? 'MLB' + matchMlb[1] : '',
-      nome,
-      specsResumo: '',
-      preco: precoRaw ? parseFloat(precoRaw) : '',
-      imagem: listaFinal[0] || '',
-      imagens: listaFinal,
-      frete: 'Frete Grátis',
-      parcelamento: '10x sem juros',
-      ficha: {}
-    });
-
-  } catch (erro) {
-    return res.status(500).json({ erro: 'Falha ao ler link: ' + erro.message });
-  }
+  ]
 }
