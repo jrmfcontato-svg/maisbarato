@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "15/11/2026, 18:17",
+  "ultimaAtualizacao": "15/11/2026, 18:18",
   "config": {
     "corPrimaria": "#6d28d9",
     "corSecundaria": "#4c1d95",
@@ -12,6 +12,44 @@
     "topBar": "⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech"
   },
   "produtos": [
+    {
+      "id": 1794777527463,
+      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAxp3vjzSQVW3a5u2mFR18hzjBDdrHg8WUU3p5zyUcjy6-ixpgVA2M0PRB6_Ts6B8xDx8WKo5EqXnCEcPno01M4s80HmTtMpzWd3dIHKk70Rx3OP-CisDjckO9RXyKjkJjEAaunMODaRi-BkaWFWv9q8eACgvJw2So3GbqA4_hXxmoMqPNvdRr0VplFVg-Fxcd7tEUo&mmp_pid=an_18352500843&uls_trackid=574ra7mn01f4&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuuokv4b4xdn",
+      "categoria": "Hardware",
+      "specsResumo": "",
+      "imagem": "https://via.placeholder.com/300",
+      "imagens": [
+        "https://via.placeholder.com/300"
+      ],
+      "quedaPercentual": 10,
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        950,
+        920,
+        890,
+        850,
+        810,
+        750
+      ],
+      "ficha": {},
+      "ofertas": [
+        {
+          "loja": "Shopee",
+          "idExterno": "",
+          "preco": 313.76,
+          "frete": "Frete Grátis",
+          "parcelamento": "10x sem juros",
+          "link": "https://s.shopee.com.br/4VeOPrHqmU"
+        }
+      ]
+    },
     {
       "id": 1,
       "nome": "Processador AMD Ryzen 5 5600, 3.5GHz (4.4GHz Max Turbo), Cache 35MB, AM4",
