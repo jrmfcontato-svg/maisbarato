@@ -10,7 +10,7 @@
 <body>
 
   <!-- Barra Superior de Aviso -->
-  <div class="top-bar">
+  <div class="top-bar" id="topBarContainer">
     ⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech • <span id="lastUpdateText">Carregando preços atualizados...</span>
   </div>
 
@@ -46,12 +46,12 @@
   </header>
 
   <!-- Banner Destaque -->
-  <section class="hero-banner">
+  <section class="hero-banner" id="heroBannerSection">
     <div class="container banner-box">
       <div class="banner-text">
-        <span class="pill">HISTÓRICO DE PREÇOS REAL</span>
-        <h1>No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho</h1>
-        <p>Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.</p>
+        <span class="pill" id="heroPill">HISTÓRICO DE PREÇOS REAL</span>
+        <h1 id="heroTitle">No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho</h1>
+        <p id="heroSub">Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.</p>
       </div>
       <div class="banner-stats">
         <div class="stat-card">
@@ -66,7 +66,7 @@
     </div>
   </section>
 
-  <!-- Conteúdo Principal (Sidebar de Filtros + Grade de Produtos) -->
+  <!-- Conteúdo Principal -->
   <main class="container main-layout">
     
     <!-- Barra Lateral de Filtros -->
@@ -106,14 +106,12 @@
         <span id="resultsCount">Carregando...</span>
       </div>
 
-      <div class="products-grid" id="productsGrid">
-        <!-- Cards inseridos dinamicamente via produtos.json -->
-      </div>
+      <div class="products-grid" id="productsGrid"></div>
     </section>
 
   </main>
 
-  <!-- Modal de Comparação Estilo Zoom/Buscapé -->
+  <!-- Modal de Comparação -->
   <div class="modal-backdrop" id="productModal">
     <div class="modal-window">
       <button class="modal-close" onclick="fecharModal()">✕</button>
@@ -125,7 +123,7 @@
         <div class="modal-info">
           <span class="tag-cat" id="modalCat">Categoria</span>
           <h2 id="modalTitle">Nome do Produto</h2>
-          <p class="modal-specs" id="modalSpecs">Especificações técnicas resumidas do produto.</p>
+          <p class="modal-specs" id="modalSpecs">Especificações técnicas resumidas.</p>
           
           <div class="best-offer-box">
             <div>
@@ -141,19 +139,16 @@
         </div>
       </div>
 
-      <!-- Abas Internas do Produto -->
       <div class="modal-tabs">
         <button class="tab-btn active" onclick="trocarAba('lojas', this)">Comparar Lojas (<span id="tabStoreCount">0</span>)</button>
         <button class="tab-btn" onclick="trocarAba('historico', this)">Histórico de Preços</button>
         <button class="tab-btn" onclick="trocarAba('ficha', this)">Ficha Técnica</button>
       </div>
 
-      <!-- Aba 1: Lista de Lojas -->
       <div class="tab-content active" id="tab-lojas">
         <div class="stores-table" id="modalStoresList"></div>
       </div>
 
-      <!-- Aba 2: Gráfico -->
       <div class="tab-content" id="tab-historico">
         <div class="chart-wrapper">
           <p class="chart-hint">Acompanhe a variação do menor preço nos últimos 6 meses:</p>
@@ -161,11 +156,9 @@
         </div>
       </div>
 
-      <!-- Aba 3: Ficha Técnica -->
       <div class="tab-content" id="tab-ficha">
         <table class="specs-table" id="modalSpecsTable"></table>
       </div>
-
     </div>
   </div>
 
@@ -201,8 +194,33 @@
     let produtoAtualModal = null;
     let chartInstancia = null;
     let alertasSalvos = 0;
+    let corGraficoAtual = "#6d28d9";
 
     const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    function aplicarLayoutPersonalizado(c, ultimaAtualizacao) {
+      if (!c) return;
+      if (c.corPrimaria) {
+        document.documentElement.style.setProperty('--primary', c.corPrimaria);
+        corGraficoAtual = c.corPrimaria;
+      }
+      if (c.corSecundaria) document.documentElement.style.setProperty('--primary-dark', c.corSecundaria);
+      if (c.corDestaque) document.documentElement.style.setProperty('--accent', c.corDestaque);
+
+      if (c.colunas && window.innerWidth > 900) {
+        document.getElementById('productsGrid').style.gridTemplateColumns = `repeat(${c.colunas}, minmax(0, 1fr))`;
+      }
+      if (c.mostrarBanner === 'nao') {
+        document.getElementById('heroBannerSection').style.display = 'none';
+      }
+      if (c.bannerPill) document.getElementById('heroPill').innerText = c.bannerPill;
+      if (c.bannerTitulo) document.getElementById('heroTitle').innerText = c.bannerTitulo;
+      if (c.bannerSub) document.getElementById('heroSub').innerText = c.bannerSub;
+      if (c.topBar) {
+        const infoData = ultimaAtualizacao ? `Atualizado em: ${ultimaAtualizacao}` : 'Preços sincronizados hoje';
+        document.getElementById('topBarContainer').innerHTML = `${c.topBar} • <span id="lastUpdateText">${infoData}</span>`;
+      }
+    }
 
     async function carregarCatalogo() {
       const grid = document.getElementById('productsGrid');
@@ -219,6 +237,10 @@
           document.getElementById('lastUpdateText').innerText = `Preços sincronizados hoje`;
         }
 
+        if (dados.config) {
+          aplicarLayoutPersonalizado(dados.config, dados.ultimaAtualizacao);
+        }
+
         filtrarProdutos();
       } catch (erro) {
         console.error("Erro ao carregar ofertas:", erro);
@@ -226,9 +248,6 @@
         grid.innerHTML = `
           <div style="grid-column: 1 / -1; background: #fff; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; text-align: center;">
             <h3>Não foi possível carregar o arquivo <code>produtos.json</code></h3>
-            <p style="color: #6b7280; margin-top: 8px;">
-              Abra usando um servidor local (<code>npx serve</code>) ou acesse pelo domínio online.
-            </p>
           </div>
         `;
       }
@@ -339,7 +358,7 @@
       });
 
       const specsEl = document.getElementById('modalSpecsTable');
-      specsEl.innerHTML = Object.entries(prod.ficha)
+      specsEl.innerHTML = Object.entries(prod.ficha || {})
         .map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`)
         .join('');
 
@@ -352,7 +371,7 @@
           datasets: [{
             label: 'Menor Preço Registrado (R$)',
             data: prod.historico,
-            borderColor: '#6d28d9',
+            borderColor: corGraficoAtual,
             backgroundColor: 'rgba(109, 40, 217, 0.12)',
             borderWidth: 3,
             pointRadius: 5,
