@@ -44,9 +44,10 @@ async function atualizarCatalogo() {
   });
 
   const saida = {
-    ultimaAtualizacao: dataBR,
-    produtos: produtos
-  };
+  ultimaAtualizacao: agora,
+  config: dados.config || {},
+  produtos: dados.produtos
+};
 
   fs.writeFileSync('produtos.json', JSON.stringify(saida, null, 2));
   console.log('Catálogo atualizado com sucesso em:', dataBR);
