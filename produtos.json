@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "15/11/2026, 18:14",
+  "ultimaAtualizacao": "15/11/2026, 18:17",
   "config": {
     "corPrimaria": "#6d28d9",
     "corSecundaria": "#4c1d95",
@@ -12,76 +12,6 @@
     "topBar": "⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech"
   },
   "produtos": [
-    {
-      "id": 1794777242150,
-      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAyFef0h7jZGmAVQ1UKkWyDvlZjaHfXC4XSHzrmM_FG0JtPc3C2St8b89DcutYsEBUilasYU_Bu0B2ph-MjdNPQzWRy6chdfXUoXf2pxE6P8f0_--4AjFa99-0Lz1dm8PcjfvoJbVn4Pae6RScKUH4uSPJoIXSQkeD3QYj-0_TRXcN2x7nSRh-gZt8IwAo6to9cGf-0&mmp_pid=an_18352500843&uls_trackid=574r9c7e00bs&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuunxe3u4eo9",
-      "categoria": "Hardware",
-      "specsResumo": "",
-      "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webp",
-      "quedaPercentual": 10,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        950,
-        920,
-        890,
-        850,
-        810,
-        750
-      ],
-      "ficha": {},
-      "ofertas": [
-        {
-          "loja": "Shopee",
-          "idExterno": "",
-          "preco": 313.73,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x sem juros",
-          "link": "https://s.shopee.com.br/4VeOPrHqmU"
-        }
-      ]
-    },
-    {
-      "id": 1794776858375,
-      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAw7P-nLN4vvyBVkKRjD-LQ2nYIX8gaf8jJkZk9Sdi4C0e1qhhmTKRdR0js5pKseugdfH4KW0Dr77CxF96VRhWqthCBK2KhkieaB20OvI2xDRbUPMrj5glzyQwsZ3ZY4VJaHnAU6Md48bHYKNLpIuzQ7paSgiLz1i2WKvCgpkCy0LxfCjvgHGOVOjZVQ3FLz-bv4OeI&mmp_pid=an_18352500843&uls_trackid=574r84mf03c2&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuumz3292631",
-      "categoria": "Hardware",
-      "specsResumo": "",
-      "imagem": "https://vihttps://down-br.img.susercontent.com/file/sg-11134201-82621-mlkz3fkto8w036.webpa.placeholder.com/300",
-      "quedaPercentual": 10,
-      "meses": [
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov"
-      ],
-      "historico": [
-        950,
-        920,
-        890,
-        850,
-        810,
-        750
-      ],
-      "ficha": {},
-      "ofertas": [
-        {
-          "loja": "Shopee",
-          "idExterno": "",
-          "preco": 313.73,
-          "frete": "Frete Grátis",
-          "parcelamento": "10x sem juros",
-          "link": "https://s.shopee.com.br/4VeOPrHqmU"
-        }
-      ]
-    },
     {
       "id": 1,
       "nome": "Processador AMD Ryzen 5 5600, 3.5GHz (4.4GHz Max Turbo), Cache 35MB, AM4",
