@@ -1,6 +1,54 @@
 {
-  "ultimaAtualizacao": "15/11/2026, 15:42",
+  "ultimaAtualizacao": "15/11/2026, 17:59",
+  "config": {
+    "corPrimaria": "#6d28d9",
+    "corSecundaria": "#4c1d95",
+    "corDestaque": "#facc15",
+    "colunas": "4",
+    "mostrarBanner": "sim",
+    "bannerPill": "HISTÓRICO DE PREÇOS REAL",
+    "bannerTitulo": "No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho",
+    "bannerSub": "Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.",
+    "topBar": "⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech"
+  },
   "produtos": [
+    {
+      "id": 1794775572782,
+      "nome": "Placa de vídeo GTX1050TI 1G versão internacional, placa de vídeo DDR5 para computador, placa de vídeo independente HD 4G",
+      "categoria": "Hardware",
+      "specsResumo": "Produto internacional objeto de declaração de importação e sujeito a impostos estaduais e federais",
+      "imagem": "https://down-br.img.susercontent.com/file/br-11134258-820m5-ml8a34rlu7t287",
+      "quedaPercentual": 20,
+      "meses": [
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov"
+      ],
+      "historico": [
+        950,
+        920,
+        890,
+        850,
+        810,
+        750
+      ],
+      "ficha": {
+        "NVIDIA": "4GB"
+      },
+      "ofertas": [
+        {
+          "loja": "Shopee",
+          "idExterno": "",
+          "preco": 313.73,
+          "frete": "Frete Grátis",
+          "parcelamento": "10x sem juros",
+          "link": "https://s.shopee.com.br/AAIl8HJy8x"
+        }
+      ]
+    },
     {
       "id": 1,
       "nome": "Processador AMD Ryzen 5 5600, 3.5GHz (4.4GHz Max Turbo), Cache 35MB, AM4",
