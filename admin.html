@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin - GarimpaTech</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin: 28px auto; }
+    .panel-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .panel-box h2 { margin-bottom: 16px; font-size: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .offer-card-admin { background: #f9fafb; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; position: relative; }
+    .btn-remove { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #b91c1c; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
+    .btn-add-sub { background: #ede9fe; color: var(--primary); border: 1px dashed var(--primary); padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 16px; }
+    .btn-save-prod { background: var(--success); color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; }
+    .btn-download { background: var(--accent); color: #111827; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+    .prod-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); gap: 10px; }
+    .prod-list-item img { width: 48px; height: 48px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); }
+    .action-btns { display: flex; gap: 6px; }
+    .btn-sm { padding: 6px 10px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">⛏️ Garimpa<span>Tech</span> <small style="font-size:0.8rem; opacity:0.8; margin-left:6px;">ADMIN</small></a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <label class="btn-outline" style="cursor:pointer;">
+          📂 Importar produtos.json
+          <input type="file" id="importJsonFile" accept=".json" style="display:none;" onchange="importarArquivo(event)">
+        </label>
+        <button class="btn-download" onclick="baixarJson()">💾 Baixar produtos.json Atualizado</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-grid">
+    
+    <!-- Formulário de Cadastro / Edição -->
+    <section class="panel-box">
+      <h2 id="formTitle">Cadastrar Novo Produto Tech</h2>
+      <input type="hidden" id="editId" value="">
+
+      <div class="form-group">
+        <label>Nome Completo do Produto</label>
+        <input type="text" id="pNome" placeholder="Ex: Processador AMD Ryzen 5 5600...">
+      </div>
+
+      <div class="row-2">
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="pCategoria">
+            <option value="Hardware">Hardware & PC</option>
+            <option value="Smartphones">Smartphones</option>
+            <option value="Perifericos">Monitores & Periféricos</option>
+            <option value="Notebooks">Notebooks</option>
+            <option value="Eletro">Casa Inteligente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Queda de Preço Hoje (%)</label>
+          <input type="number" id="pQueda" value="10" min="0" max="99">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Resumo das Especificações (aparece no card)</label>
+        <input type="text" id="pSpecs" placeholder="Ex: 6 Núcleos • 12 Threads • Socket AM4">
+      </div>
+
+      <div class="form-group">
+        <label>URL da Imagem do Produto</label>
+        <input type="url" id="pImagem" placeholder="https://...">
+      </div>
+
+      <div class="form-group">
+        <label>Histórico dos últimos 6 meses (valores separados por vírgula)</label>
+        <input type="text" id="pHistorico" value="950, 920, 890, 850, 810, 750">
+      </div>
+
+      <h3 style="margin: 18px 0 10px; font-size: 1rem;">Lojas e Links de Afiliado</h3>
+      <div id="ofertasContainer"></div>
+      <button type="button" class="btn-add-sub" onclick="adicionarCampoOferta()">+ Adicionar Loja / Oferta</button>
+
+      <h3 style="margin: 18px 0 10px; font-size: 1rem;">Ficha Técnica (Opcional)</h3>
+      <div id="fichaContainer"></div>
+      <button type="button" class="btn-add-sub" onclick="adicionarCampoFicha()">+ Adicionar Especificação</button>
+
+      <button type="button" class="btn-save-prod" onclick="salvarProduto()">✅ Salvar Produto no Catálogo</button>
+    </section>
+
+    <!-- Lista de Produtos Cadastrados -->
+    <section class="panel-box">
+      <h2>Produtos no GarimpaTech (<span id="totalProds">0</span>)</h2>
+      <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:14px;">
+        Após cadastrar ou editar seus produtos, clique em <strong>"Baixar produtos.json Atualizado"</strong> no topo e substitua o arquivo no GitHub.
+      </p>
+      <div id="listaProdutosAdmin"></div>
+    </section>
+
+  </main>
+
+  <script>
+    let produtos = [];
+
+    async function initAdmin() {
+      try {
+        const res = await fetch(`produtos.json?v=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          produtos = data.produtos || data;
+        }
+      } catch (e) {
+        console.log("Iniciando catálogo vazio ou aguardando importação.");
+      }
+      renderizarListaAdmin();
+      adicionarCampoOferta();
+      adicionarCampoFicha("Marca", "");
+    }
+
+    function adicionarCampoOferta(dados = { loja: "Amazon", idExterno: "", preco: "", frete: "Frete Grátis", parcelamento: "10x sem juros", link: "" }) {
+      const div = document.createElement('div');
+      div.className = 'offer-card-admin oferta-item';
+      div.innerHTML = `
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">Remover</button>
+        <div class="row-2" style="margin-bottom:8px;">
+          <div>
+            <label style="font-size:0.78rem;">Loja</label>
+            <select class="of-loja">
+              <option ${dados.loja === 'Amazon' ? 'selected' : ''}>Amazon</option>
+              <option ${dados.loja === 'Mercado Livre' ? 'selected' : ''}>Mercado Livre</option>
+              <option ${dados.loja === 'Shopee' ? 'selected' : ''}>Shopee</option>
+              <option ${dados.loja === 'KaBuM!' ? 'selected' : ''}>KaBuM!</option>
+              <option ${dados.loja === 'Magalu' ? 'selected' : ''}>Magalu</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.78rem;">Preço à Vista (R$)</label>
+            <input type="number" step="0.01" class="of-preco" value="${dados.preco}" placeholder="729.90">
+          </div>
+        </div>
+        <div class="row-2" style="margin-bottom:8px;">
+          <div>
+            <label style="font-size:0.78rem;">ID do Anúncio (Ex: MLB123456)</label>
+            <input type="text" class="of-id" value="${dados.idExterno || ''}" placeholder="Para atualização auto">
+          </div>
+          <div>
+            <label style="font-size:0.78rem;">Frete / Info</label>
+            <input type="text" class="of-frete" value="${dados.frete}" placeholder="Frete Grátis">
+          </div>
+        </div>
+        <div class="row-2">
+          <div>
+            <label style="font-size:0.78rem;">Parcelamento</label>
+            <input type="text" class="of-parc" value="${dados.parcelamento}" placeholder="10x de R$ 72,99">
+          </div>
+          <div>
+            <label style="font-size:0.78rem;">Seu Link de Afiliado</label>
+            <input type="url" class="of-link" value="${dados.link}" placeholder="https://amzn.to/...">
+          </div>
+        </div>
+      `;
+      document.getElementById('ofertasContainer').appendChild(div);
+    }
+
+    function adicionarCampoFicha(chave = "", valor = "") {
+      const div = document.createElement('div');
+      div.className = 'row-2 ficha-item';
+      div.style.marginBottom = '8px';
+      div.innerHTML = `
+        <input type="text" class="f-chave" value="${chave}" placeholder="Ex: Memória RAM">
+        <div style="display:flex; gap:6px;">
+          <input type="text" class="f-valor" value="${valor}" placeholder="Ex: 8 GB">
+          <button type="button" onclick="this.parentElement.parentElement.remove()" style="background:#fee2e2; color:#b91c1c; border:none; padding:0 10px; border-radius:6px; cursor:pointer;">✕</button>
+        </div>
+      `;
+      document.getElementById('fichaContainer').appendChild(div);
+    }
+
+    function salvarProduto() {
+      const editId = document.getElementById('editId').value;
+      const nome = document.getElementById('pNome').value.trim();
+      if (!nome) return alert("Digite o nome do produto!");
+
+      const ofertas = [];
+      document.querySelectorAll('.oferta-item').forEach(el => {
+        const preco = parseFloat(el.querySelector('.of-preco').value);
+        if (!isNaN(preco)) {
+          ofertas.push({
+            loja: el.querySelector('.of-loja').value,
+            idExterno: el.querySelector('.of-id').value.trim(),
+            preco: preco,
+            frete: el.querySelector('.of-frete').value.trim() || "Consultar frete",
+            parcelamento: el.querySelector('.of-parc').value.trim() || "À vista",
+            link: el.querySelector('.of-link').value.trim() || "#"
+          });
+        }
+      });
+
+      if (ofertas.length === 0) return alert("Adicione pelo menos uma oferta com preço válido!");
+
+      const ficha = {};
+      document.querySelectorAll('.ficha-item').forEach(el => {
+        const k = el.querySelector('.f-chave').value.trim();
+        const v = el.querySelector('.f-valor').value.trim();
+        if (k && v) ficha[k] = v;
+      });
+
+      const histRaw = document.getElementById('pHistorico').value.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+
+      const novoObj = {
+        id: editId ? parseInt(editId) : Date.now(),
+        nome,
+        categoria: document.getElementById('pCategoria').value,
+        specsResumo: document.getElementById('pSpecs').value.trim(),
+        imagem: document.getElementById('pImagem').value.trim() || "https://via.placeholder.com/300",
+        quedaPercentual: parseInt(document.getElementById('pQueda').value) || 0,
+        meses: ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
+        historico: histRaw.length ? histRaw : [ofertas[0].preco],
+        ficha,
+        ofertas
+      };
+
+      if (editId) {
+        const idx = produtos.findIndex(p => p.id === parseInt(editId));
+        produtos[idx] = novoObj;
+      } else {
+        produtos.unshift(novoObj);
+      }
+
+      limparFormulario();
+      renderizarListaAdmin();
+      alert("Produto salvo na lista! Lembre-se de baixar o produtos.json ao finalizar.");
+    }
+
+    function editarProduto(id) {
+      const p = produtos.find(item => item.id === id);
+      document.getElementById('formTitle').innerText = "Editando Produto";
+      document.getElementById('editId').value = p.id;
+      document.getElementById('pNome').value = p.nome;
+      document.getElementById('pCategoria').value = p.categoria;
+      document.getElementById('pQueda').value = p.quedaPercentual;
+      document.getElementById('pSpecs').value = p.specsResumo;
+      document.getElementById('pImagem').value = p.imagem;
+      document.getElementById('pHistorico').value = p.historico.join(', ');
+
+      document.getElementById('ofertasContainer').innerHTML = "";
+      p.ofertas.forEach(of => adicionarCampoOferta(of));
+
+      document.getElementById('fichaContainer').innerHTML = "";
+      Object.entries(p.ficha || {}).forEach(([k, v]) => adicionarCampoFicha(k, v));
+    }
+
+    function excluirProduto(id) {
+      if (!confirm("Remover este produto do catálogo?")) return;
+      produtos = produtos.filter(p => p.id !== id);
+      renderizarListaAdmin();
+    }
+
+    function limparFormulario() {
+      document.getElementById('formTitle').innerText = "Cadastrar Novo Produto Tech";
+      document.getElementById('editId').value = "";
+      document.getElementById('pNome').value = "";
+      document.getElementById('pSpecs').value = "";
+      document.getElementById('pImagem').value = "";
+      document.getElementById('ofertasContainer').innerHTML = "";
+      document.getElementById('fichaContainer').innerHTML = "";
+      adicionarCampoOferta();
+      adicionarCampoFicha("Marca", "");
+    }
+
+    function renderizarListaAdmin() {
+      document.getElementById('totalProds').innerText = produtos.length;
+      const box = document.getElementById('listaProdutosAdmin');
+      box.innerHTML = produtos.map(p => {
+        const menor = Math.min(...p.ofertas.map(o => o.preco));
+        return `
+          <div class="prod-list-item">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <img src="${p.imagem}">
+              <div>
+                <strong style="font-size:0.9rem; display:block;">${p.nome}</strong>
+                <small style="color:var(--success); font-weight:700;">Menor: R$ ${menor.toFixed(2)} (${p.ofertas.length} lojas)</small>
+              </div>
+            </div>
+            <div class="action-btns">
+              <button class="btn-sm" style="background:#e0e7ff; color:#3730a3;" onclick="editarProduto(${p.id})">Editar</button>
+              <button class="btn-sm" style="background:#fee2e2; color:#b91c1c;" onclick="excluirProduto(${p.id})">Excluir</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function baixarJson() {
+      const agora = new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+      const payload = {
+        ultimaAtualizacao: agora,
+        produtos: produtos
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'produtos.json';
+      a.click();
+    }
+
+    function importarArquivo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
+        produtos = data.produtos || data;
+        renderizarListaAdmin();
+        alert("Catálogo importado com sucesso!");
+      };
+      reader.readAsText(file);
+    }
+
+    initAdmin();
+  </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GarimpaTech - Compare Preços de Hardware, Smartphones e Tech</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Barra Superior de Aviso -->
+  <div class="top-bar">
+    ⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech • <span id="lastUpdateText">Carregando preços atualizados...</span>
+  </div>
+
+  <!-- Cabeçalho Principal -->
+  <header class="main-header">
+    <div class="container header-content">
+      <a href="#" class="logo">
+        <span class="logo-icon">⛏️</span>
+        Garimpa<span>Tech</span>
+      </a>
+
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="O que você está garimpando hoje? Ex: Ryzen, RTX, Galaxy, Monitor...">
+        <button class="search-btn" onclick="filtrarProdutos()">Buscar</button>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-outline" onclick="abrirAlertas()">🔔 Meus Alertas (<span id="alertCount">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- Menu de Categorias Tech -->
+    <nav class="category-nav">
+      <div class="container nav-links" id="categoryNav">
+        <button class="nav-item active" data-cat="todos">Todas as Ofertas</button>
+        <button class="nav-item" data-cat="Hardware">Hardware & PC</button>
+        <button class="nav-item" data-cat="Smartphones">Smartphones</button>
+        <button class="nav-item" data-cat="Perifericos">Monitores & Periféricos</button>
+        <button class="nav-item" data-cat="Notebooks">Notebooks</button>
+        <button class="nav-item" data-cat="Eletro">Casa Inteligente</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner Destaque -->
+  <section class="hero-banner">
+    <div class="container banner-box">
+      <div class="banner-text">
+        <span class="pill">HISTÓRICO DE PREÇOS REAL</span>
+        <h1>No GarimpaTech você descobre se o desconto é real antes de fechar o carrinho</h1>
+        <p>Monitoramos hardware, smartphones e eletrônicos nas maiores lojas do Brasil para você nunca pagar metade do dobro.</p>
+      </div>
+      <div class="banner-stats">
+        <div class="stat-card">
+          <strong>+15</strong>
+          <span>Lojas Monitoradas</span>
+        </div>
+        <div class="stat-card">
+          <strong>100%</strong>
+          <span>Grátis e Seguro</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conteúdo Principal (Sidebar de Filtros + Grade de Produtos) -->
+  <main class="container main-layout">
+    
+    <!-- Barra Lateral de Filtros -->
+    <aside class="sidebar">
+      <div class="filter-group">
+        <h3>Ordenar por</h3>
+        <select id="sortSelect" onchange="filtrarProdutos()">
+          <option value="relevancia">Mais Relevantes</option>
+          <option value="menor-preco">Menor Preço</option>
+          <option value="maior-preco">Maior Preço</option>
+          <option value="maior-desconto">Maior Queda de Preço</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <h3>Faixa de Preço</h3>
+        <label class="radio-item"><input type="radio" name="priceRange" value="all" checked onchange="filtrarProdutos()"> Qualquer valor</label>
+        <label class="radio-item"><input type="radio" name="priceRange" value="1000" onchange="filtrarProdutos()"> Até R$ 1.000</label>
+        <label class="radio-item"><input type="radio" name="priceRange" value="2500" onchange="filtrarProdutos()"> Até R$ 2.500</label>
+        <label class="radio-item"><input type="radio" name="priceRange" value="5000" onchange="filtrarProdutos()"> Até R$ 5.000</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Lojas Parceiras</h3>
+        <label class="check-item"><input type="checkbox" class="store-filter" value="Amazon" checked onchange="filtrarProdutos()"> Amazon</label>
+        <label class="check-item"><input type="checkbox" class="store-filter" value="Mercado Livre" checked onchange="filtrarProdutos()"> Mercado Livre</label>
+        <label class="check-item"><input type="checkbox" class="store-filter" value="KaBuM!" checked onchange="filtrarProdutos()"> KaBuM!</label>
+        <label class="check-item"><input type="checkbox" class="store-filter" value="Magalu" checked onchange="filtrarProdutos()"> Magalu</label>
+        <label class="check-item"><input type="checkbox" class="store-filter" value="Shopee" checked onchange="filtrarProdutos()"> Shopee</label>
+      </div>
+    </aside>
+
+    <!-- Área de Resultados -->
+    <section class="results-area">
+      <div class="results-header">
+        <h2 id="sectionTitle">Ofertas em Destaque</h2>
+        <span id="resultsCount">Carregando...</span>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+        <!-- Cards inseridos dinamicamente via produtos.json -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal de Comparação Estilo Zoom/Buscapé -->
+  <div class="modal-backdrop" id="productModal">
+    <div class="modal-window">
+      <button class="modal-close" onclick="fecharModal()">✕</button>
+      
+      <div class="modal-top">
+        <div class="modal-img-box">
+          <img id="modalImg" src="" alt="Produto">
+        </div>
+        <div class="modal-info">
+          <span class="tag-cat" id="modalCat">Categoria</span>
+          <h2 id="modalTitle">Nome do Produto</h2>
+          <p class="modal-specs" id="modalSpecs">Especificações técnicas resumidas do produto.</p>
+          
+          <div class="best-offer-box">
+            <div>
+              <span class="label">Menor preço à vista:</span>
+              <div class="big-price" id="modalBestPrice">R$ 0,00</div>
+              <span class="store-highlight" id="modalBestStore">via Loja</span>
+            </div>
+            <div class="modal-cta-group">
+              <a href="#" target="_blank" id="modalBestLink" class="btn-buy-now">Ir à Loja ↗</a>
+              <button class="btn-alert" onclick="criarAlertaProduto()">🔔 Criar Alerta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abas Internas do Produto -->
+      <div class="modal-tabs">
+        <button class="tab-btn active" onclick="trocarAba('lojas', this)">Comparar Lojas (<span id="tabStoreCount">0</span>)</button>
+        <button class="tab-btn" onclick="trocarAba('historico', this)">Histórico de Preços</button>
+        <button class="tab-btn" onclick="trocarAba('ficha', this)">Ficha Técnica</button>
+      </div>
+
+      <!-- Aba 1: Lista de Lojas -->
+      <div class="tab-content active" id="tab-lojas">
+        <div class="stores-table" id="modalStoresList"></div>
+      </div>
+
+      <!-- Aba 2: Gráfico -->
+      <div class="tab-content" id="tab-historico">
+        <div class="chart-wrapper">
+          <p class="chart-hint">Acompanhe a variação do menor preço nos últimos 6 meses:</p>
+          <canvas id="historyChart" height="110"></canvas>
+        </div>
+      </div>
+
+      <!-- Aba 3: Ficha Técnica -->
+      <div class="tab-content" id="tab-ficha">
+        <table class="specs-table" id="modalSpecsTable"></table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="logo footer-logo">⛏️ Garimpa<span>Tech</span></div>
+        <p>Comparador de preços independente especializado em tecnologia. Os valores exibidos são coletados nas lojas parceiras e podem sofrer alteração sem aviso prévio.</p>
+      </div>
+      <div>
+        <h4>Categorias</h4>
+        <ul>
+          <li><a href="#">Hardware & PC</a></li>
+          <li><a href="#">Smartphones</a></li>
+          <li><a href="#">Monitores & Periféricos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Transparência</h4>
+        <ul>
+          <li><a href="#">Como funciona o GarimpaTech</a></li>
+          <li><a href="#">Política de Afiliados</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let catalogo = [];
+    let categoriaSelecionada = "todos";
+    let produtoAtualModal = null;
+    let chartInstancia = null;
+    let alertasSalvos = 0;
+
+    const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    async function carregarCatalogo() {
+      const grid = document.getElementById('productsGrid');
+      try {
+        const resposta = await fetch(`produtos.json?v=${Date.now()}`);
+        if (!resposta.ok) throw new Error('Falha ao ler produtos.json');
+        
+        const dados = await resposta.json();
+        catalogo = dados.produtos || dados;
+
+        if (dados.ultimaAtualizacao) {
+          document.getElementById('lastUpdateText').innerText = `Atualizado em: ${dados.ultimaAtualizacao}`;
+        } else {
+          document.getElementById('lastUpdateText').innerText = `Preços sincronizados hoje`;
+        }
+
+        filtrarProdutos();
+      } catch (erro) {
+        console.error("Erro ao carregar ofertas:", erro);
+        document.getElementById('lastUpdateText').innerText = "Modo offline";
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; background: #fff; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; text-align: center;">
+            <h3>Não foi possível carregar o arquivo <code>produtos.json</code></h3>
+            <p style="color: #6b7280; margin-top: 8px;">
+              Abra usando um servidor local (<code>npx serve</code>) ou acesse pelo domínio online.
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    function filtrarProdutos() {
+      const busca = document.getElementById('searchInput').value.toLowerCase();
+      const ordem = document.getElementById('sortSelect').value;
+      const faixaPreco = document.querySelector('input[name="priceRange"]:checked').value;
+      const lojasAtivas = Array.from(document.querySelectorAll('.store-filter:checked')).map(cb => cb.value);
+
+      let lista = catalogo.map(prod => {
+        const ofertasFiltradas = prod.ofertas
+          .filter(o => lojasAtivas.includes(o.loja))
+          .sort((a, b) => a.preco - b.preco);
+        return { ...prod, ofertasValidas: ofertasFiltradas };
+      }).filter(prod => {
+        if (prod.ofertasValidas.length === 0) return false;
+        const menor = prod.ofertasValidas[0].preco;
+        const matchCat = categoriaSelecionada === "todos" || prod.categoria === categoriaSelecionada;
+        const matchBusca = prod.nome.toLowerCase().includes(busca) || prod.specsResumo.toLowerCase().includes(busca);
+        const matchPreco = faixaPreco === "all" || menor <= parseFloat(faixaPreco);
+        return matchCat && matchBusca && matchPreco;
+      });
+
+      if (ordem === "menor-preco") {
+        lista.sort((a, b) => a.ofertasValidas[0].preco - b.ofertasValidas[0].preco);
+      } else if (ordem === "maior-preco") {
+        lista.sort((a, b) => b.ofertasValidas[0].preco - a.ofertasValidas[0].preco);
+      } else if (ordem === "maior-desconto") {
+        lista.sort((a, b) => b.quedaPercentual - a.quedaPercentual);
+      }
+
+      renderizarGrid(lista);
+    }
+
+    function renderizarGrid(lista) {
+      const grid = document.getElementById('productsGrid');
+      document.getElementById('resultsCount').innerText = `${lista.length} produto(s) encontrado(s)`;
+      grid.innerHTML = "";
+
+      if (lista.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1 / -1; color: #6b7280; padding: 20px 0;">Nenhum produto encontrado com esses filtros.</p>`;
+        return;
+      }
+
+      lista.forEach(prod => {
+        const melhor = prod.ofertasValidas[0];
+        grid.innerHTML += `
+          <article class="product-card" onclick="abrirModal(${prod.id})">
+            <div class="card-badges">
+              <span class="badge-drop">📉 -${prod.quedaPercentual}% hoje</span>
+              <span class="badge-stores">${prod.ofertasValidas.length} lojas</span>
+            </div>
+            <div class="card-img">
+              <img src="${prod.imagem}" alt="${prod.nome}">
+            </div>
+            <div class="card-body">
+              <span class="card-cat">${prod.categoria}</span>
+              <h3 class="card-title">${prod.nome}</h3>
+              <p class="card-specs">${prod.specsResumo}</p>
+              <div class="card-price-block">
+                <span class="price-from">Menor preço via <strong>${melhor.loja}</strong></span>
+                <div class="price-main">${formatarBRL(melhor.preco)}</div>
+                <span class="price-installment">${melhor.parcelamento}</span>
+              </div>
+              <button class="btn-card-compare">Comparar em ${prod.ofertasValidas.length} lojas</button>
+            </div>
+          </article>
+        `;
+      });
+    }
+
+    function abrirModal(id) {
+      const prod = catalogo.find(p => p.id === id);
+      produtoAtualModal = prod;
+      const ofertas = [...prod.ofertas].sort((a, b) => a.preco - b.preco);
+      const melhor = ofertas[0];
+
+      document.getElementById('modalImg').src = prod.imagem;
+      document.getElementById('modalCat').innerText = prod.categoria;
+      document.getElementById('modalTitle').innerText = prod.nome;
+      document.getElementById('modalSpecs').innerText = prod.specsResumo;
+      document.getElementById('modalBestPrice').innerText = formatarBRL(melhor.preco);
+      document.getElementById('modalBestStore').innerText = `via ${melhor.loja} • ${melhor.frete}`;
+      document.getElementById('modalBestLink').href = melhor.link;
+      document.getElementById('tabStoreCount').innerText = ofertas.length;
+
+      const listEl = document.getElementById('modalStoresList');
+      listEl.innerHTML = "";
+      ofertas.forEach((of, idx) => {
+        listEl.innerHTML += `
+          <div class="store-item ${idx === 0 ? 'winner' : ''}">
+            <div class="store-col-name">
+              <strong>${of.loja}</strong>
+              ${idx === 0 ? '<span class="winner-tag">MELHOR PREÇO</span>' : ''}
+              <small>${of.frete}</small>
+            </div>
+            <div class="store-col-price">
+              <div class="val">${formatarBRL(of.preco)}</div>
+              <small>${of.parcelamento}</small>
+            </div>
+            <div class="store-col-cta">
+              <a href="${of.link}" target="_blank" class="btn-go-store">Ir à loja</a>
+            </div>
+          </div>
+        `;
+      });
+
+      const specsEl = document.getElementById('modalSpecsTable');
+      specsEl.innerHTML = Object.entries(prod.ficha)
+        .map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`)
+        .join('');
+
+      const ctx = document.getElementById('historyChart').getContext('2d');
+      if (chartInstancia) chartInstancia.destroy();
+      chartInstancia = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: prod.meses,
+          datasets: [{
+            label: 'Menor Preço Registrado (R$)',
+            data: prod.historico,
+            borderColor: '#6d28d9',
+            backgroundColor: 'rgba(109, 40, 217, 0.12)',
+            borderWidth: 3,
+            pointRadius: 5,
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: { responsive: true }
+      });
+
+      document.getElementById('productModal').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('productModal').style.display = 'none';
+    }
+
+    function trocarAba(abaId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${abaId}`).classList.add('active');
+    }
+
+    function criarAlertaProduto() {
+      alertasSalvos++;
+      document.getElementById('alertCount').innerText = alertasSalvos;
+      alert(`Alerta ativado no GarimpaTech para: ${produtoAtualModal.nome}!`);
+    }
+
+    function abrirAlertas() {
+      alert(`Você possui ${alertasSalvos} alerta(s) de preço ativo(s) nesta sessão.`);
+    }
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        categoriaSelecionada = e.target.dataset.cat;
+        document.getElementById('sectionTitle').innerText =
+          categoriaSelecionada === "todos" ? "Ofertas em Destaque" : `Ofertas em ${categoriaSelecionada}`;
+        filtrarProdutos();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', filtrarProdutos);
+
+    carregarCatalogo();
+  </script>
+</body>
+</html>
