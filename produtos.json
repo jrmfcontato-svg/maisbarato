@@ -1,5 +1,5 @@
 {
-  "ultimaAtualizacao": "15/11/2026, 17:59",
+  "ultimaAtualizacao": "15/11/2026, 18:07",
   "config": {
     "corPrimaria": "#6d28d9",
     "corSecundaria": "#4c1d95",
@@ -13,12 +13,12 @@
   },
   "produtos": [
     {
-      "id": 1794775572782,
-      "nome": "Placa de vídeo GTX1050TI 1G versão internacional, placa de vídeo DDR5 para computador, placa de vídeo independente HD 4G",
+      "id": 1794776858375,
+      "nome": "56306946301?__mobile__=1&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QACpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMc1TPTF0zl9lUk9doKYfbtNkYCBZaTm6dQ6q3WJIrnGYlyLtpSCE1-D6jy2YmlKEe_b7zxJZfI6lpwZ6fqmNpcGhlcnRleHTElwAAAAw7P-nLN4vvyBVkKRjD-LQ2nYIX8gaf8jJkZk9Sdi4C0e1qhhmTKRdR0js5pKseugdfH4KW0Dr77CxF96VRhWqthCBK2KhkieaB20OvI2xDRbUPMrj5glzyQwsZ3ZY4VJaHnAU6Md48bHYKNLpIuzQ7paSgiLz1i2WKvCgpkCy0LxfCjvgHGOVOjZVQ3FLz-bv4OeI&mmp_pid=an_18352500843&uls_trackid=574r84mf03c2&utm_campaign=id_50vZClH1Cgj&utm_content=----&utm_medium=affiliates&utm_source=an_18352500843&utm_term=fuumz3292631",
       "categoria": "Hardware",
-      "specsResumo": "Produto internacional objeto de declaração de importação e sujeito a impostos estaduais e federais",
-      "imagem": "https://down-br.img.susercontent.com/file/br-11134258-820m5-ml8a34rlu7t287",
-      "quedaPercentual": 20,
+      "specsResumo": "",
+      "imagem": "https://via.placeholder.com/300",
+      "quedaPercentual": 10,
       "meses": [
         "Jun",
         "Jul",
@@ -35,9 +35,7 @@
         810,
         750
       ],
-      "ficha": {
-        "NVIDIA": "4GB"
-      },
+      "ficha": {},
       "ofertas": [
         {
           "loja": "Shopee",
@@ -45,7 +43,7 @@
           "preco": 313.73,
           "frete": "Frete Grátis",
           "parcelamento": "10x sem juros",
-          "link": "https://s.shopee.com.br/AAIl8HJy8x"
+          "link": "https://s.shopee.com.br/4VeOPrHqmU"
         }
       ]
     },
