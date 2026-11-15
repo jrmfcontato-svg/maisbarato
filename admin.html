@@ -27,9 +27,7 @@
     .login-error { color: #dc2626; font-size: 0.85rem; margin-top: 10px; display: none; }
 
     #adminApp { display: none; }
-    .admin-tabs {
-      background: #fff; border-bottom: 1px solid var(--border); padding: 0 20px;
-    }
+    .admin-tabs { background: #fff; border-bottom: 1px solid var(--border); padding: 0 20px; }
     .admin-tabs .container { display: flex; gap: 12px; flex-wrap: wrap; }
     .admin-tab-btn {
       padding: 14px 18px; border: none; background: none; font-weight: 700;
@@ -51,6 +49,19 @@
       font-weight: 700; cursor: pointer; white-space: nowrap;
     }
     .btn-fetch-link:disabled { opacity: 0.6; cursor: wait; }
+
+    .gallery-preview-admin {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .gallery-thumb-box {
+      position: relative; width: 58px; height: 58px; border: 1px solid var(--border);
+      border-radius: 6px; padding: 3px; background: #fff;
+    }
+    .gallery-thumb-box img { width: 100%; height: 100%; object-fit: contain; }
+    .gallery-thumb-box button {
+      position: absolute; top: -6px; right: -6px; background: #ef4444; color: #fff;
+      border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer;
+    }
 
     .admin-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin: 28px auto; }
     .panel-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
@@ -115,7 +126,6 @@
           <h2 id="formTitle">Cadastrar Novo Produto Tech</h2>
           <input type="hidden" id="editId" value="">
 
-          <!-- IMPORTADOR AUTOMÁTICO POR LINK -->
           <div class="auto-import-box">
             <label>⚡ Preenchimento Automático (Cole o Link do Produto ou Link de Afiliado)</label>
             <div class="auto-import-row">
@@ -149,10 +159,15 @@
             <label>Resumo das Especificações</label>
             <input type="text" id="pSpecs" placeholder="Ex: 6 Núcleos • 12 Threads • Socket AM4">
           </div>
+
+          <!-- GALERIA DE IMAGENS / CARROSSEL -->
           <div class="form-group">
-            <label>URL da Imagem do Produto</label>
-            <input type="url" id="pImagem" placeholder="https://...">
+            <label>Carrossel de Imagens (1 URL por linha — a primeira é a capa)</label>
+            <textarea id="pImagensLista" rows="3" placeholder="https://imagem1.jpg
+https://imagem2.jpg" oninput="atualizarPreviewGaleria()"></textarea>
+            <div class="gallery-preview-admin" id="galleryPreviewAdmin"></div>
           </div>
+
           <div class="form-group">
             <label>Histórico dos últimos 6 meses (valores separados por vírgula)</label>
             <input type="text" id="pHistorico" value="950, 920, 890, 850, 810, 750">
@@ -319,7 +334,26 @@
       document.getElementById('pane-' + aba).classList.add('active');
     }
 
-    // --- EXTRATOR AUTOMÁTICO PELO LINK DE AFILIADO ---
+    function atualizarPreviewGaleria() {
+      const urls = document.getElementById('pImagensLista').value
+        .split('\n').map(u => u.trim()).filter(Boolean);
+      const box = document.getElementById('galleryPreviewAdmin');
+      box.innerHTML = urls.map((u, idx) => `
+        <div class="gallery-thumb-box">
+          <img src="${u}" alt="Foto ${idx + 1}">
+          <button type="button" onclick="removerFotoGaleria(${idx})" title="Remover foto">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function removerFotoGaleria(index) {
+      const urls = document.getElementById('pImagensLista').value
+        .split('\n').map(u => u.trim()).filter(Boolean);
+      urls.splice(index, 1);
+      document.getElementById('pImagensLista').value = urls.join('\n');
+      atualizarPreviewGaleria();
+    }
+
     async function puxarDadosDoLink() {
       const linkOriginal = document.getElementById('urlImportInput').value.trim();
       if (!linkOriginal) return alert("Cole primeiro o link do produto ou de afiliado.");
@@ -328,23 +362,29 @@
       const status = document.getElementById('importStatus');
       btn.disabled = true;
       btn.innerText = "Buscando...";
-      status.innerText = "Lendo informações da loja, aguarde...";
+      status.innerText = "Lendo informações e galeria de fotos da loja...";
 
       try {
         const res = await fetch('/api/puxar-produto?url=' + encodeURIComponent(linkOriginal));
         const dados = await res.json();
 
         if (!res.ok || dados.erro) {
-          status.innerText = "⚠️ " + (dados.erro || "Não foi possível ler este link automaticamente.");
+          status.innerText = "⚠️ " + (dados.erro || "Não foi possível ler este link.");
           btn.disabled = false;
           btn.innerText = "Puxar Dados";
           return;
         }
 
         if (dados.nome) document.getElementById('pNome').value = dados.nome;
-        if (dados.imagem) document.getElementById('pImagem').value = dados.imagem;
 
-        // Preenche ou cria o card de oferta com o link de afiliado colado
+        const listaFotos = (dados.imagens && dados.imagens.length > 0)
+          ? dados.imagens
+          : (dados.imagem ? [dados.imagem] : []);
+        if (listaFotos.length > 0) {
+          document.getElementById('pImagensLista').value = listaFotos.join('\n');
+          atualizarPreviewGaleria();
+        }
+
         const ofertasEl = document.getElementById('ofertasContainer');
         const primeiroCard = ofertasEl.querySelector('.oferta-item');
         const precoVal = dados.preco ? parseFloat(dados.preco) : "";
@@ -379,9 +419,7 @@
           if (resumo) document.getElementById('pSpecs').value = resumo;
         }
 
-        status.innerText = precoVal
-          ? `✅ Dados importados de ${dados.loja}! Confira e clique em "Salvar Produto na Lista".`
-          : `✅ Título e foto importados de ${dados.loja}! Informe apenas o preço à vista e salve.`;
+        status.innerText = `✅ Importado de ${dados.loja} (${listaFotos.length} foto(s) no carrossel)!`;
       } catch (e) {
         status.innerText = "⚠️ Erro ao conectar com a função de extração.";
       } finally {
@@ -565,6 +603,11 @@
         }
       });
       if (ofertas.length === 0) return alert("Adicione pelo menos uma oferta com preço!");
+
+      const imagensArray = document.getElementById('pImagensLista').value
+        .split('\n').map(u => u.trim()).filter(Boolean);
+      const imagemCapa = imagensArray[0] || "https://via.placeholder.com/300";
+
       const ficha = {};
       document.querySelectorAll('.ficha-item').forEach(el => {
         const k = el.querySelector('.f-chave').value.trim();
@@ -577,7 +620,8 @@
         nome,
         categoria: document.getElementById('pCategoria').value,
         specsResumo: document.getElementById('pSpecs').value.trim(),
-        imagem: document.getElementById('pImagem').value.trim() || "https://via.placeholder.com/300",
+        imagem: imagemCapa,
+        imagens: imagensArray.length ? imagensArray : [imagemCapa],
         quedaPercentual: parseInt(document.getElementById('pQueda').value) || 0,
         meses: ["Jun", "Jul", "Ago", "Set", "Out", "Nov"],
         historico: histRaw.length ? histRaw : [ofertas[0].preco],
@@ -592,7 +636,7 @@
       }
       limparFormulario();
       renderizarListaAdmin();
-      alert("Produto salvo na lista! Lembre-se de clicar em '🚀 Publicar Direto no Site'.");
+      alert("Produto salvo na lista! Clique em '🚀 Publicar Direto no Site'.");
     }
 
     function editarProduto(id) {
@@ -603,7 +647,11 @@
       document.getElementById('pCategoria').value = p.categoria;
       document.getElementById('pQueda').value = p.quedaPercentual;
       document.getElementById('pSpecs').value = p.specsResumo;
-      document.getElementById('pImagem').value = p.imagem;
+
+      const listaFotos = (p.imagens && p.imagens.length) ? p.imagens : (p.imagem ? [p.imagem] : []);
+      document.getElementById('pImagensLista').value = listaFotos.join('\n');
+      atualizarPreviewGaleria();
+
       document.getElementById('pHistorico').value = p.historico.join(', ');
       document.getElementById('ofertasContainer').innerHTML = "";
       p.ofertas.forEach(of => adicionarCampoOferta(of));
@@ -624,7 +672,8 @@
       document.getElementById('importStatus').innerText = "";
       document.getElementById('pNome').value = "";
       document.getElementById('pSpecs').value = "";
-      document.getElementById('pImagem').value = "";
+      document.getElementById('pImagensLista').value = "";
+      document.getElementById('galleryPreviewAdmin').innerHTML = "";
       document.getElementById('ofertasContainer').innerHTML = "";
       document.getElementById('fichaContainer').innerHTML = "";
       adicionarCampoOferta();
@@ -635,13 +684,14 @@
       document.getElementById('totalProds').innerText = produtos.length;
       document.getElementById('listaProdutosAdmin').innerHTML = produtos.map(p => {
         const menor = Math.min(...p.ofertas.map(o => o.preco));
+        const qtdFotos = (p.imagens && p.imagens.length) ? p.imagens.length : 1;
         return `
           <div class="prod-list-item">
             <div style="display:flex; align-items:center; gap:12px;">
               <img src="${p.imagem}">
               <div>
                 <strong style="font-size:0.9rem; display:block;">${p.nome}</strong>
-                <small style="color:var(--success); font-weight:700;">Menor: R$ ${menor.toFixed(2)} (${p.ofertas.length} lojas)</small>
+                <small style="color:var(--success); font-weight:700;">Menor: R$ ${menor.toFixed(2)} • ${p.ofertas.length} loja(s) • ${qtdFotos} foto(s)</small>
               </div>
             </div>
             <div class="action-btns">
