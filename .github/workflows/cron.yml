@@ -1,1 +1,31 @@
+name: Atualizar Precos MaisBarato
 
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Roda automaticamente a cada 6 horas
+  workflow_dispatch:       # Permite rodar manualmente com 1 clique no GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo do repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Executar robo de precos
+        run: node atualizar.js
+
+      - name: Salvar produtos.json atualizado
+        run: |
+          git config --local user.email "bot@maisbarato.com"
+          git config --local user.name "MaisBarato Bot"
+          git add produtos.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Atualizacao automatica de precos" && git push)
