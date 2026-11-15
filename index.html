@@ -6,18 +6,29 @@
   <title>GarimpaTech - Compare Preços de Hardware, Smartphones e Tech</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .modal-gallery-thumbs {
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px;
+    }
+    .modal-thumb-btn {
+      width: 48px; height: 48px; border: 2px solid var(--border); border-radius: 6px;
+      padding: 3px; background: #fff; cursor: pointer; transition: 0.15s;
+    }
+    .modal-thumb-btn.active, .modal-thumb-btn:hover {
+      border-color: var(--primary); transform: scale(1.05);
+    }
+    .modal-thumb-btn img { width: 100%; height: 100%; object-fit: contain; }
+  </style>
 </head>
 <body>
 
-  <!-- Barra Superior de Aviso -->
   <div class="top-bar" id="topBarContainer">
     ⚡ GarimpaTech: ofertas verificadas em mais de 15 lojas tech • <span id="lastUpdateText">Carregando preços atualizados...</span>
   </div>
 
-  <!-- Cabeçalho Principal -->
   <header class="main-header">
     <div class="container header-content">
-      <a href="#" class="logo">
+      <a href="/" class="logo">
         <span class="logo-icon">⛏️</span>
         Garimpa<span>Tech</span>
       </a>
@@ -32,7 +43,6 @@
       </div>
     </div>
 
-    <!-- Menu de Categorias Tech -->
     <nav class="category-nav">
       <div class="container nav-links" id="categoryNav">
         <button class="nav-item active" data-cat="todos">Todas as Ofertas</button>
@@ -45,7 +55,6 @@
     </nav>
   </header>
 
-  <!-- Banner Destaque -->
   <section class="hero-banner" id="heroBannerSection">
     <div class="container banner-box">
       <div class="banner-text">
@@ -66,10 +75,7 @@
     </div>
   </section>
 
-  <!-- Conteúdo Principal -->
   <main class="container main-layout">
-    
-    <!-- Barra Lateral de Filtros -->
     <aside class="sidebar">
       <div class="filter-group">
         <h3>Ordenar por</h3>
@@ -99,26 +105,23 @@
       </div>
     </aside>
 
-    <!-- Área de Resultados -->
     <section class="results-area">
       <div class="results-header">
         <h2 id="sectionTitle">Ofertas em Destaque</h2>
         <span id="resultsCount">Carregando...</span>
       </div>
-
       <div class="products-grid" id="productsGrid"></div>
     </section>
-
   </main>
 
-  <!-- Modal de Comparação -->
   <div class="modal-backdrop" id="productModal">
     <div class="modal-window">
       <button class="modal-close" onclick="fecharModal()">✕</button>
       
       <div class="modal-top">
-        <div class="modal-img-box">
+        <div class="modal-img-box" style="flex-direction: column;">
           <img id="modalImg" src="" alt="Produto">
+          <div class="modal-gallery-thumbs" id="modalGalleryThumbs"></div>
         </div>
         <div class="modal-info">
           <span class="tag-cat" id="modalCat">Categoria</span>
@@ -162,7 +165,6 @@
     </div>
   </div>
 
-  <!-- Rodapé -->
   <footer class="main-footer">
     <div class="container footer-grid">
       <div>
@@ -243,13 +245,7 @@
 
         filtrarProdutos();
       } catch (erro) {
-        console.error("Erro ao carregar ofertas:", erro);
         document.getElementById('lastUpdateText').innerText = "Modo offline";
-        grid.innerHTML = `
-          <div style="grid-column: 1 / -1; background: #fff; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; text-align: center;">
-            <h3>Não foi possível carregar o arquivo <code>produtos.json</code></h3>
-          </div>
-        `;
       }
     }
 
@@ -321,13 +317,30 @@
       });
     }
 
+    function trocarFotoModal(url, btn) {
+      document.getElementById('modalImg').src = url;
+      document.querySelectorAll('.modal-thumb-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
     function abrirModal(id) {
       const prod = catalogo.find(p => p.id === id);
       produtoAtualModal = prod;
       const ofertas = [...prod.ofertas].sort((a, b) => a.preco - b.preco);
       const melhor = ofertas[0];
 
-      document.getElementById('modalImg').src = prod.imagem;
+      const fotos = (prod.imagens && prod.imagens.length > 0) ? prod.imagens : [prod.imagem];
+      document.getElementById('modalImg').src = fotos[0];
+
+      const thumbsBox = document.getElementById('modalGalleryThumbs');
+      thumbsBox.innerHTML = fotos.length > 1
+        ? fotos.map((f, i) => `
+            <button type="button" class="modal-thumb-btn ${i === 0 ? 'active' : ''}" onclick="trocarFotoModal('${f}', this)">
+              <img src="${f}" alt="Foto ${i + 1}">
+            </button>
+          `).join('')
+        : '';
+
       document.getElementById('modalCat').innerText = prod.categoria;
       document.getElementById('modalTitle').innerText = prod.nome;
       document.getElementById('modalSpecs').innerText = prod.specsResumo;
