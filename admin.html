@@ -39,6 +39,19 @@
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
 
+    .auto-import-box {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      border: 1px solid #c4b5fd; border-radius: 10px; padding: 14px; margin-bottom: 18px;
+    }
+    .auto-import-box label { display: block; font-size: 0.85rem; font-weight: 800; color: #4c1d95; margin-bottom: 6px; }
+    .auto-import-row { display: flex; gap: 8px; }
+    .auto-import-row input { flex: 1; padding: 10px 12px; border: 1px solid #a78bfa; border-radius: 8px; font-size: 0.9rem; }
+    .btn-fetch-link {
+      background: #6d28d9; color: #fff; border: none; padding: 0 16px; border-radius: 8px;
+      font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .btn-fetch-link:disabled { opacity: 0.6; cursor: wait; }
+
     .admin-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin: 28px auto; }
     .panel-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
     .panel-box h2 { margin-bottom: 16px; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
@@ -60,7 +73,7 @@
     .prod-list-item img { width: 48px; height: 48px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); }
     .action-btns { display: flex; gap: 6px; }
     .btn-sm { padding: 6px 10px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
-    @media (max-width: 900px) { .admin-grid, .row-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .admin-grid, .row-3, .auto-import-row { grid-template-columns: 1fr; flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -79,7 +92,7 @@
   <div id="adminApp">
     <header class="main-header">
       <div class="container header-content">
-        <a href="index.html" class="logo">⛏️ Garimpa<span>Tech</span> <small style="font-size:0.78rem; opacity:0.8; margin-left:6px;">ADMIN</small></a>
+        <a href="/" class="logo">⛏️ Garimpa<span>Tech</span> <small style="font-size:0.78rem; opacity:0.8; margin-left:6px;">ADMIN</small></a>
         <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
           <button type="button" class="btn-publish" onclick="publicarNoGithub()">🚀 Publicar Direto no Site</button>
           <button type="button" class="btn-download" onclick="baixarJson()">💾 Baixar JSON</button>
@@ -101,6 +114,17 @@
         <section class="panel-box">
           <h2 id="formTitle">Cadastrar Novo Produto Tech</h2>
           <input type="hidden" id="editId" value="">
+
+          <!-- IMPORTADOR AUTOMÁTICO POR LINK -->
+          <div class="auto-import-box">
+            <label>⚡ Preenchimento Automático (Cole o Link do Produto ou Link de Afiliado)</label>
+            <div class="auto-import-row">
+              <input type="url" id="urlImportInput" placeholder="https://amzn.to/... ou https://mercadolivre.com/sec/...">
+              <button type="button" class="btn-fetch-link" id="btnFetchLink" onclick="puxarDadosDoLink()">Puxar Dados</button>
+            </div>
+            <small id="importStatus" style="display:block; margin-top:6px; color:#5b21b6; font-size:0.78rem;"></small>
+          </div>
+
           <div class="form-group">
             <label>Nome Completo do Produto</label>
             <input type="text" id="pNome" placeholder="Ex: Processador AMD Ryzen 5 5600...">
@@ -135,7 +159,7 @@
           </div>
           <h3 style="margin: 18px 0 10px; font-size: 1rem;">Lojas e Links de Afiliado</h3>
           <div id="ofertasContainer"></div>
-          <button type="button" class="btn-add-sub" onclick="adicionarCampoOferta()">+ Adicionar Loja / Oferta</button>
+          <button type="button" class="btn-add-sub" onclick="adicionarCampoOferta()">+ Adicionar Outra Loja / Oferta</button>
           <h3 style="margin: 18px 0 10px; font-size: 1rem;">Ficha Técnica (Opcional)</h3>
           <div id="fichaContainer"></div>
           <button type="button" class="btn-add-sub" onclick="adicionarCampoFicha()">+ Adicionar Especificação</button>
@@ -145,7 +169,7 @@
         <section class="panel-box">
           <h2>Produtos no GarimpaTech (<span id="totalProds">0</span>)</h2>
           <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:14px;">
-            Depois de editar, clique em <strong>"🚀 Publicar Direto no Site"</strong> no topo ou baixe o JSON.
+            Depois de salvar na lista, clique em <strong>"🚀 Publicar Direto no Site"</strong> no topo para enviar ao ar.
           </p>
           <div id="listaProdutosAdmin"></div>
         </section>
@@ -295,6 +319,77 @@
       document.getElementById('pane-' + aba).classList.add('active');
     }
 
+    // --- EXTRATOR AUTOMÁTICO PELO LINK DE AFILIADO ---
+    async function puxarDadosDoLink() {
+      const linkOriginal = document.getElementById('urlImportInput').value.trim();
+      if (!linkOriginal) return alert("Cole primeiro o link do produto ou de afiliado.");
+
+      const btn = document.getElementById('btnFetchLink');
+      const status = document.getElementById('importStatus');
+      btn.disabled = true;
+      btn.innerText = "Buscando...";
+      status.innerText = "Lendo informações da loja, aguarde...";
+
+      try {
+        const res = await fetch('/api/puxar-produto?url=' + encodeURIComponent(linkOriginal));
+        const dados = await res.json();
+
+        if (!res.ok || dados.erro) {
+          status.innerText = "⚠️ " + (dados.erro || "Não foi possível ler este link automaticamente.");
+          btn.disabled = false;
+          btn.innerText = "Puxar Dados";
+          return;
+        }
+
+        if (dados.nome) document.getElementById('pNome').value = dados.nome;
+        if (dados.imagem) document.getElementById('pImagem').value = dados.imagem;
+
+        // Preenche ou cria o card de oferta com o link de afiliado colado
+        const ofertasEl = document.getElementById('ofertasContainer');
+        const primeiroCard = ofertasEl.querySelector('.oferta-item');
+        const precoVal = dados.preco ? parseFloat(dados.preco) : "";
+
+        if (primeiroCard && !primeiroCard.querySelector('.of-link').value) {
+          primeiroCard.querySelector('.of-loja').value = dados.loja || "Amazon";
+          primeiroCard.querySelector('.of-id').value = dados.idExterno || "";
+          if (precoVal) primeiroCard.querySelector('.of-preco').value = precoVal;
+          primeiroCard.querySelector('.of-frete').value = dados.frete || "Frete Grátis";
+          primeiroCard.querySelector('.of-parc').value = dados.parcelamento || "10x sem juros";
+          primeiroCard.querySelector('.of-link').value = linkOriginal;
+        } else {
+          adicionarCampoOferta({
+            loja: dados.loja || "Amazon",
+            idExterno: dados.idExterno || "",
+            preco: precoVal,
+            frete: dados.frete || "Frete Grátis",
+            parcelamento: dados.parcelamento || "10x sem juros",
+            link: linkOriginal
+          });
+        }
+
+        if (precoVal) {
+          const pBase = Math.round(precoVal * 1.15);
+          document.getElementById('pHistorico').value = `${pBase}, ${Math.round(precoVal * 1.12)}, ${Math.round(precoVal * 1.08)}, ${Math.round(precoVal * 1.05)}, ${Math.round(precoVal * 1.02)}, ${precoVal}`;
+        }
+
+        if (dados.ficha && Object.keys(dados.ficha).length > 0) {
+          document.getElementById('fichaContainer').innerHTML = "";
+          Object.entries(dados.ficha).forEach(([k, v]) => adicionarCampoFicha(k, v));
+          const resumo = Object.values(dados.ficha).slice(0, 3).join(' • ');
+          if (resumo) document.getElementById('pSpecs').value = resumo;
+        }
+
+        status.innerText = precoVal
+          ? `✅ Dados importados de ${dados.loja}! Confira e clique em "Salvar Produto na Lista".`
+          : `✅ Título e foto importados de ${dados.loja}! Informe apenas o preço à vista e salve.`;
+      } catch (e) {
+        status.innerText = "⚠️ Erro ao conectar com a função de extração.";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Puxar Dados";
+      }
+    }
+
     async function initAdmin() {
       document.getElementById('ghOwner').value = localStorage.getItem('gh_owner') || 'jrmfcontato-svg';
       document.getElementById('ghRepo').value = localStorage.getItem('gh_repo') || 'maisbarato';
@@ -377,7 +472,7 @@
           headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: 'Atualizacao via Painel Admin', content: conteudoBase64, sha: sha })
         });
-        if (putRes.ok) alert("✅ Publicado com sucesso!");
+        if (putRes.ok) alert("✅ Publicado com sucesso! Em ~15 segundos o site garimpatech.com.br estará atualizado.");
         else alert("Erro ao publicar: " + (await putRes.json()).message);
       } catch (e) {
         alert("Erro de conexão com o GitHub.");
@@ -469,7 +564,7 @@
           });
         }
       });
-      if (ofertas.length === 0) return alert("Adicione pelo menos uma oferta!");
+      if (ofertas.length === 0) return alert("Adicione pelo menos uma oferta com preço!");
       const ficha = {};
       document.querySelectorAll('.ficha-item').forEach(el => {
         const k = el.querySelector('.f-chave').value.trim();
@@ -497,7 +592,7 @@
       }
       limparFormulario();
       renderizarListaAdmin();
-      alert("Produto salvo na lista!");
+      alert("Produto salvo na lista! Lembre-se de clicar em '🚀 Publicar Direto no Site'.");
     }
 
     function editarProduto(id) {
@@ -525,6 +620,8 @@
     function limparFormulario() {
       document.getElementById('formTitle').innerText = "Cadastrar Novo Produto Tech";
       document.getElementById('editId').value = "";
+      document.getElementById('urlImportInput').value = "";
+      document.getElementById('importStatus').innerText = "";
       document.getElementById('pNome').value = "";
       document.getElementById('pSpecs').value = "";
       document.getElementById('pImagem').value = "";
